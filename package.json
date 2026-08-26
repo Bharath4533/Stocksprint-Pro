@@ -1,0 +1,14 @@
+{
+  "name": "stocksprint-pro",
+  "version": "1.0.0",
+  "description": "StockSprint Pro virtual trading learning platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node tests/run-tests.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.2"
+  }
+}

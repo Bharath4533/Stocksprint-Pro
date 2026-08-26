@@ -1,0 +1,1 @@
+const {spawn}=require('child_process');const s=spawn(process.execPath,['backend/server.js'],{stdio:'inherit'});setTimeout(()=>{const t=spawn(process.execPath,['tests/test.js'],{stdio:'inherit'});t.on('close',c=>{s.kill();process.exit(c)})},1200)

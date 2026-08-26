@@ -1,0 +1,161 @@
+{
+  "user": {
+    "name": "Bharath",
+    "email": "bharath@example.com",
+    "tradingBalance": 125000,
+    "cash": 85000
+  },
+  "stocks": [
+    {
+      "symbol": "TCS",
+      "name": "Tata Consultancy Services",
+      "price": 4125.3,
+      "change": 2.45,
+      "cap": "Large Cap",
+      "sector": "Software",
+      "volume": 1250000,
+      "value": 5150000000
+    },
+    {
+      "symbol": "INFY",
+      "name": "Infosys",
+      "price": 1860.1,
+      "change": 1.92,
+      "cap": "Large Cap",
+      "sector": "Software",
+      "volume": 2100000,
+      "value": 3900000000
+    },
+    {
+      "symbol": "HCLTECH",
+      "name": "HCL Technologies",
+      "price": 1688.4,
+      "change": 3.1,
+      "cap": "Large Cap",
+      "sector": "Software",
+      "volume": 980000,
+      "value": 1650000000
+    },
+    {
+      "symbol": "WIPRO",
+      "name": "Wipro",
+      "price": 545.7,
+      "change": -1.2,
+      "cap": "Large Cap",
+      "sector": "Software",
+      "volume": 3100000,
+      "value": 1690000000
+    },
+    {
+      "symbol": "RELIANCE",
+      "name": "Reliance Industries",
+      "price": 2910.25,
+      "change": 0.85,
+      "cap": "Large Cap",
+      "sector": "Energy",
+      "volume": 2400000,
+      "value": 6980000000
+    },
+    {
+      "symbol": "HDFCBANK",
+      "name": "HDFC Bank",
+      "price": 1955.6,
+      "change": -0.65,
+      "cap": "Large Cap",
+      "sector": "Banking",
+      "volume": 2750000,
+      "value": 5370000000
+    },
+    {
+      "symbol": "ICICIBANK",
+      "name": "ICICI Bank",
+      "price": 1310.4,
+      "change": 1.35,
+      "cap": "Large Cap",
+      "sector": "Banking",
+      "volume": 1900000,
+      "value": 2490000000
+    },
+    {
+      "symbol": "SUZLON",
+      "name": "Suzlon Energy",
+      "price": 72.2,
+      "change": 4.85,
+      "cap": "Mid Cap",
+      "sector": "Renewable Energy",
+      "volume": 18500000,
+      "value": 1330000000
+    },
+    {
+      "symbol": "IDEA",
+      "name": "Vodafone Idea",
+      "price": 11.85,
+      "change": -3.75,
+      "cap": "Small Cap",
+      "sector": "Telecom",
+      "volume": 42000000,
+      "value": 498000000
+    },
+    {
+      "symbol": "ITC",
+      "name": "ITC",
+      "price": 495.8,
+      "change": 0.42,
+      "cap": "Large Cap",
+      "sector": "FMCG",
+      "volume": 3500000,
+      "value": 1735000000
+    }
+  ],
+  "wishlist": {
+    "My Wishlist": [
+      "TCS",
+      "INFY"
+    ],
+    "Software Picks": [
+      "HCLTECH"
+    ]
+  },
+  "portfolio": {
+    "equity": 78000,
+    "mutualFunds": 22000,
+    "mtfBorrowing": 5000,
+    "investmentPicks": [
+      "TCS",
+      "INFY",
+      "RELIANCE"
+    ]
+  },
+  "orders": [
+    {
+      "id": "ORD1001",
+      "symbol": "TCS",
+      "side": "BUY",
+      "qty": 2,
+      "price": 4100,
+      "status": "Completed",
+      "date": "2026-08-26"
+    },
+    {
+      "id": "ORD1002",
+      "symbol": "INFY",
+      "side": "BUY",
+      "qty": 5,
+      "price": 1850,
+      "status": "Completed",
+      "date": "2026-08-26"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "text": "Welcome to StockSprint Pro!",
+      "read": false
+    },
+    {
+      "id": 2,
+      "text": "Your virtual portfolio was updated.",
+      "read": false
+    }
+  ]
+}

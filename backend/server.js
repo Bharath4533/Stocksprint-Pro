@@ -155,6 +155,13 @@ app.use('/api/support', supportRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/legal', legalRoutes);
 
+const supabaseService = require('./services/supabaseService');
+
+app.get('/api/supabase/status', async (req, res) => {
+  const status = await supabaseService.getStatus();
+  res.json(status);
+});
+
 // Server-Sent Events (SSE) for simulated real-time market stream
 app.get('/api/stream/ticks', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -164,12 +171,12 @@ app.get('/api/stream/ticks', (req, res) => {
 
   const intervalId = setInterval(() => {
     marketDataProvider.simulatePriceTick();
-    const indices = marketDataProvider.getIndices();
-    const topGainers = marketDataProvider.getTopGainers(4);
+    const indices = marketDataProvider.getBenchmarkIndices();
+    const movers = marketDataProvider.getTopMovers();
     const data = JSON.stringify({
       timestamp: Date.now(),
       indices,
-      topGainers
+      topGainers: movers.gainers
     });
     res.write(`data: ${data}\n\n`);
   }, 3000);
@@ -187,15 +194,21 @@ app.get('*', (req, res) => {
 // Centralized error handler
 app.use(errorHandler);
 
-// Background Live Price Simulation (every 4 seconds)
+// Background Live Price Drift & Live Market Feed Sync
 setInterval(() => {
   marketDataProvider.simulatePriceTick();
 }, 4000);
+
+// Live real-time market data sync from public exchange API every 60s
+setInterval(() => {
+  marketDataProvider.syncLiveMarketData().catch(() => {});
+}, 60000);
 
 const PORT = config.PORT;
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`🚀 ${config.APP_NAME} running at http://localhost:${PORT}`);
+    marketDataProvider.syncLiveMarketData().catch(() => {});
   });
 }
 

@@ -66,6 +66,13 @@ async function runIntegrationTests() {
     const res = await request('/api/health');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.status, 'OK');
+    assert.strictEqual(res.data.app, 'StockSprint Pro');
+  });
+
+  await test('GET /api/supabase/status returns database connection status', async () => {
+    const res = await request('/api/supabase/status');
+    assert.strictEqual(res.status, 200);
+    assert(res.data.mode);
   });
 
   await test('GET /api/state returns valid portfolio & stocks for backward compatibility', async () => {

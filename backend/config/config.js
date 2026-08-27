@@ -17,6 +17,6 @@ module.exports = {
     DEFAULT_CURRENCY: 'INR'
   },
   DEFAULT_SIMULATED_FUNDS: 500000,
-  APP_NAME: 'NexTrade Pro',
+  APP_NAME: 'StockSprint Pro',
   APP_VERSION: '2.0.0'
 };

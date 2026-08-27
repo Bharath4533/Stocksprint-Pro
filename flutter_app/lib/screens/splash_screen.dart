@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               alignment: Alignment.center,
               child: const Text(
-                'N',
+                'S',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.w900,
@@ -69,11 +69,11 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Nex',
+                  'Stock',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
                 ),
                 Text(
-                  'Trade',
+                  'Sprint',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: AppTheme.brandPrimary),
                 ),
                 const SizedBox(width: 6),

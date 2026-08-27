@@ -1,9 +1,9 @@
-// Master Test Runner for NexTrade Pro
+// Master Test Runner for StockSprint Pro
 
 const { spawn } = require('child_process');
 const path = require('path');
 
-console.log('🚀 Starting NexTrade Pro Test Suite...');
+console.log('🚀 Starting StockSprint Pro Test Suite...');
 
 // 1. Run Unit Tests synchronously
 const unit = spawn(process.execPath, [path.join(__dirname, 'unit.test.js')], { stdio: 'inherit' });

@@ -21,7 +21,7 @@ const OnboardingView = {
     container.innerHTML = `
       <div style="max-width: 680px; margin: 0 auto;">
         <div style="margin-bottom: 24px; text-align: center;">
-          <h1 style="font-size: 26px; font-weight: 800; color: var(--text-primary);">NexTrade Onboarding & KYC</h1>
+          <h1 style="font-size: 26px; font-weight: 800; color: var(--text-primary);">StockSprint Onboarding & KYC</h1>
           <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">Complete your simulated Indian regulatory KYC onboarding in simple steps.</p>
         </div>
 

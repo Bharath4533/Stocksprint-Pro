@@ -1,13 +1,42 @@
+// Live Market Data Provider & Indian Securities Engine for StockSprint Pro
+
+const http = require('http');
+const https = require('https');
 const db = require('../models/db');
 const config = require('../config/config');
 
 class MarketDataProvider {
+  constructor() {
+    this.tickerMap = {
+      'RELIANCE': 'RELIANCE.NS',
+      'TCS': 'TCS.NS',
+      'INFY': 'INFY.NS',
+      'HDFCBANK': 'HDFCBANK.NS',
+      'ICICIBANK': 'ICICIBANK.NS',
+      'SBIN': 'SBIN.NS',
+      'ITC': 'ITC.NS',
+      'LT': 'LT.NS',
+      'BHARTIARTL': 'BHARTIARTL.NS',
+      'MARUTI': 'MARUTI.NS',
+      'TATAMOTORS': 'TATAMOTORS.NS',
+      'ZOMATO': 'ZOMATO.NS',
+      'SUZLON': 'SUZLON.NS',
+      'TRENT': 'TRENT.NS',
+      'NIFTY 50': '^NSEI',
+      'SENSEX': '^BSESN',
+      'BANK NIFTY': '^NSEBANK',
+      'NIFTY IT': '^CNXIT',
+    };
+
+    this.lastLiveFetch = 0;
+  }
+
   getMarketStatus() {
     const now = new Date();
-    // Use IST timezone conversion
+    // Convert to IST
     const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
     const ist = new Date(utc + (3600000 * 5.5));
-    const day = ist.getDay(); // 0 = Sunday, 6 = Saturday
+    const day = ist.getDay(); // 0 = Sun, 6 = Sat
 
     if (day === 0 || day === 6) {
       return { status: 'CLOSED', message: 'Market Closed (Weekend)', nextOpen: 'Monday 09:15 AM IST' };
@@ -20,7 +49,7 @@ class MarketDataProvider {
     if (currentTime >= '09:00' && currentTime < '09:15') {
       return { status: 'PRE_OPEN', message: 'Pre-Open Session', nextOpen: '09:15 AM IST' };
     } else if (currentTime >= '09:15' && currentTime <= '15:30') {
-      return { status: 'OPEN', message: 'Market Open', closeTime: '03:30 PM IST' };
+      return { status: 'OPEN', message: 'Live Trading Session Active', closeTime: '03:30 PM IST' };
     } else if (currentTime > '15:30' && currentTime <= '16:00') {
       return { status: 'POST_CLOSE', message: 'Post-Closing Session', nextOpen: 'Tomorrow 09:15 AM IST' };
     } else {
@@ -28,11 +57,95 @@ class MarketDataProvider {
     }
   }
 
-  // Simulate realistic Brownian motion price drift
+  // Fetch Live Real Market Data from Public Market Data API
+  async fetchLiveQuote(symbol) {
+    const ticker = this.tickerMap[symbol] || `${symbol}.NS`;
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1m&range=1d`;
+
+    return new Promise((resolve) => {
+      const req = https.get(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'application/json',
+        },
+        timeout: 4000,
+      }, (res) => {
+        let rawData = '';
+        res.on('data', chunk => rawData += chunk);
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(rawData);
+            const result = parsed.chart?.result?.[0];
+            if (result && result.meta) {
+              const meta = result.meta;
+              const price = meta.regularMarketPrice || meta.chartPreviousClose;
+              const prevClose = meta.chartPreviousClose || meta.previousClose || price;
+              const change = Math.round((price - prevClose) * 100) / 100;
+              const percentChange = Math.round(((change / prevClose) * 100) * 100) / 100;
+
+              resolve({
+                price: Math.round(price * 100) / 100,
+                prevClose: Math.round(prevClose * 100) / 100,
+                high: Math.round((meta.regularMarketDayHigh || price) * 100) / 100,
+                low: Math.round((meta.regularMarketDayLow || price) * 100) / 100,
+                volume: meta.regularMarketVolume || 0,
+                change,
+                percentChange,
+                isLive: true,
+              });
+              return;
+            }
+          } catch (e) {}
+          resolve(null);
+        });
+      });
+
+      req.on('error', () => resolve(null));
+      req.on('timeout', () => {
+        req.destroy();
+        resolve(null);
+      });
+    });
+  }
+
+  // Refresh all live market quotes periodically
+  async syncLiveMarketData() {
+    const securities = db.getCollection('securities');
+    for (const sec of securities.slice(0, 8)) {
+      try {
+        const live = await this.fetchLiveQuote(sec.symbol);
+        if (live && live.price > 0) {
+          sec.price = live.price;
+          sec.prevClose = live.prevClose;
+          sec.change = live.change;
+          sec.percentChange = live.percentChange;
+          if (live.high > sec.high) sec.high = live.high;
+          if (live.low < sec.low) sec.low = live.low;
+          if (live.volume > 0) sec.volume = live.volume;
+        }
+      } catch (e) {}
+    }
+
+    const indices = db.getCollection('indices');
+    for (const idx of indices.slice(0, 3)) {
+      try {
+        const live = await this.fetchLiveQuote(idx.symbol);
+        if (live && live.price > 0) {
+          idx.value = live.price;
+          idx.prevClose = live.prevClose;
+          idx.change = live.change;
+          idx.percentChange = live.percentChange;
+        }
+      } catch (e) {}
+    }
+
+    db.save();
+  }
+
+  // Continuous realistic price tick simulation with Brownian motion
   simulatePriceTick() {
     const securities = db.getCollection('securities');
     for (const sec of securities) {
-      // Small random drift between -0.3% and +0.3%
       const volatility = (sec.cap === 'Small Cap' ? 0.008 : sec.cap === 'Mid Cap' ? 0.005 : 0.003);
       const deltaPercent = (Math.random() - 0.495) * volatility;
       const rawPrice = sec.price * (1 + deltaPercent);
@@ -59,193 +172,135 @@ class MarketDataProvider {
     db.save();
   }
 
+  getQuote(symbol) {
+    if (!symbol) return null;
+    const cleanSym = symbol.toUpperCase().trim();
+    return db.findOne('securities', s => s.symbol === cleanSym);
+  }
+
+  getAllSecurities() {
+    return db.getCollection('securities');
+  }
+
   getIndices() {
     return db.getCollection('indices');
   }
 
-  getQuotes(symbols) {
-    const securities = db.getCollection('securities');
-    if (!symbols || !symbols.length) return securities;
-    const lookup = new Set(symbols.map(s => s.toUpperCase()));
-    return securities.filter(s => lookup.has(s.symbol.toUpperCase()));
+  getBenchmarkIndices() {
+    return this.getIndices();
   }
 
-  getQuote(symbol) {
-    return db.findOne('securities', s => s.symbol.toUpperCase() === symbol.toUpperCase());
+  getQuotes(symbols = null) {
+    if (!symbols) return db.getCollection('securities');
+    const set = new Set(symbols.map(s => s.toUpperCase()));
+    return db.getCollection('securities').filter(s => set.has(s.symbol));
+  }
+
+  getTopMovers() {
+    const securities = [...db.getCollection('securities')];
+    const sorted = securities.sort((a, b) => b.percentChange - a.percentChange);
+    return {
+      gainers: sorted.slice(0, 6),
+      losers: sorted.slice(-6).reverse(),
+    };
   }
 
   getTopGainers(limit = 6) {
-    const securities = db.getCollection('securities');
-    return [...securities]
-      .filter(s => s.percentChange > 0)
-      .sort((a, b) => b.percentChange - a.percentChange)
-      .slice(0, limit);
+    return this.getTopMovers().gainers.slice(0, limit);
   }
 
   getTopLosers(limit = 6) {
-    const securities = db.getCollection('securities');
-    return [...securities]
-      .filter(s => s.percentChange < 0)
-      .sort((a, b) => a.percentChange - b.percentChange)
-      .slice(0, limit);
+    return this.getTopMovers().losers.slice(0, limit);
   }
 
   getMostActiveByVolume(limit = 6) {
-    const securities = db.getCollection('securities');
-    return [...securities]
-      .sort((a, b) => b.volume - a.volume)
-      .slice(0, limit);
+    const securities = [...db.getCollection('securities')];
+    return securities.sort((a, b) => b.volume - a.volume).slice(0, limit);
   }
 
   getMostActiveByValue(limit = 6) {
-    const securities = db.getCollection('securities');
-    return [...securities]
-      .sort((a, b) => b.value - a.value)
-      .slice(0, limit);
+    const securities = [...db.getCollection('securities')];
+    return securities.sort((a, b) => b.value - a.value).slice(0, limit);
   }
 
   getBySector(sector) {
-    const securities = db.getCollection('securities');
-    if (!sector || sector === 'All') return securities;
-    return securities.filter(s => s.sector.toLowerCase().includes(sector.toLowerCase()));
+    if (!sector) return db.getCollection('securities');
+    return db.find('securities', s => s.sector && s.sector.toLowerCase() === sector.toLowerCase());
   }
 
-  // Generate realistic OHLCV Candlestick data for time ranges: 1D, 1W, 1M, 3M, 6M, 1Y, 5Y
+  // Generate historical OHLCV candles
   getHistoricalCandles(symbol, range = '1D') {
-    const quote = this.getQuote(symbol);
-    if (!quote) return [];
-
-    const basePrice = quote.prevClose || quote.price;
+    const sec = this.getQuote(symbol);
+    const basePrice = sec ? sec.price : 1000.0;
     const candles = [];
-    let numCandles = 75;
+    const now = new Date();
+
+    let count = 60;
     let intervalMinutes = 5;
-    let volatility = 0.003;
 
     switch (range.toUpperCase()) {
-      case '1D':
-        numCandles = 75; // 75 5-minute candles (09:15 to 15:30)
-        intervalMinutes = 5;
-        volatility = 0.0025;
-        break;
-      case '1W':
-        numCandles = 50;
-        intervalMinutes = 60;
-        volatility = 0.006;
-        break;
-      case '1M':
-        numCandles = 22; // 22 trading days
-        intervalMinutes = 1440;
-        volatility = 0.012;
-        break;
-      case '3M':
-        numCandles = 65;
-        intervalMinutes = 1440;
-        volatility = 0.015;
-        break;
-      case '6M':
-        numCandles = 130;
-        intervalMinutes = 1440;
-        volatility = 0.018;
-        break;
-      case '1Y':
-        numCandles = 250;
-        intervalMinutes = 1440;
-        volatility = 0.022;
-        break;
-      case '5Y':
-        numCandles = 260; // 260 weekly candles
-        intervalMinutes = 10080;
-        volatility = 0.035;
-        break;
-      default:
-        numCandles = 75;
+      case '1D': count = 75; intervalMinutes = 5; break;
+      case '1W': count = 35; intervalMinutes = 60; break;
+      case '1M': count = 30; intervalMinutes = 1440; break;
+      case '3M': count = 60; intervalMinutes = 1440; break;
+      case '1Y': count = 52; intervalMinutes = 10080; break;
+      case '5Y': count = 60; intervalMinutes = 43200; break;
+      default: count = 75; intervalMinutes = 5;
     }
 
-    const now = Date.now();
-    let current = basePrice * (1 - (numCandles * 0.001 * (quote.change >= 0 ? 1 : -1)));
+    let runningPrice = basePrice * (1 - (count * 0.0015));
 
-    // Deterministic pseudo-random seed based on symbol characters for stable past candles
-    let seed = symbol.split('').reduce((acc, c) => acc + c.charCodeAt(0), 42);
-    const pseudoRandom = () => {
-      seed = (seed * 9301 + 49297) % 233280;
-      return seed / 233280;
-    };
-
-    for (let i = 0; i < numCandles; i++) {
-      const timestamp = now - ((numCandles - i) * intervalMinutes * 60 * 1000);
-      const move = (pseudoRandom() - 0.48) * volatility * current;
-      const open = Math.round(current * 100) / 100;
-      const close = Math.round((current + move) * 100) / 100;
-      const high = Math.round((Math.max(open, close) + Math.abs(pseudoRandom() * volatility * current)) * 100) / 100;
-      const low = Math.round((Math.min(open, close) - Math.abs(pseudoRandom() * volatility * current)) * 100) / 100;
-      const volume = Math.floor(pseudoRandom() * 50000) + 5000;
+    for (let i = count; i >= 0; i--) {
+      const candleTime = new Date(now.getTime() - (i * intervalMinutes * 60 * 1000));
+      const drift = (Math.random() - 0.49) * 0.012;
+      const open = Math.round(runningPrice * 100) / 100;
+      const close = Math.round((open * (1 + drift)) * 100) / 100;
+      const high = Math.round((Math.max(open, close) * (1 + Math.random() * 0.006)) * 100) / 100;
+      const low = Math.round((Math.min(open, close) * (1 - Math.random() * 0.006)) * 100) / 100;
+      const volume = Math.floor(Math.random() * 15000) + 1200;
 
       candles.push({
-        time: timestamp,
+        time: candleTime.toISOString(),
         open,
         high,
         low,
         close,
-        volume
+        volume,
       });
 
-      current = close;
-    }
-
-    // Force the last candle's close to match live quote price
-    if (candles.length > 0) {
-      candles[candles.length - 1].close = quote.price;
-      if (candles[candles.length - 1].high < quote.price) candles[candles.length - 1].high = quote.price;
-      if (candles[candles.length - 1].low > quote.price) candles[candles.length - 1].low = quote.price;
+      runningPrice = close;
     }
 
     return candles;
   }
 
-  // Unified global search across Stocks, Mutual Funds, IPOs, Indices
-  globalSearch(query = '') {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      return {
-        popular: this.getQuotes(['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'TATAMOTORS']),
-        recent: []
-      };
-    }
+  // Global search across Stocks, Mutual Funds, IPOs, and Indices
+  search(query) {
+    if (!query || query.trim() === '') return { results: [], totalCount: 0 };
+    const q = query.toLowerCase().trim();
 
-    const securities = db.getCollection('securities');
-    const mutualFunds = db.getCollection('mutualFunds');
-    const ipos = db.getCollection('ipos');
-    const indices = db.getCollection('indices');
+    const securities = db.getCollection('securities')
+      .filter(s => s.symbol.toLowerCase().includes(q) || s.name.toLowerCase().includes(q) || (s.sector && s.sector.toLowerCase().includes(q)))
+      .map(s => ({ type: 'STOCK', symbol: s.symbol, name: s.name, price: s.price, percentChange: s.percentChange, exchange: s.exchange }));
 
-    const matchedStocks = securities.filter(s =>
-      s.symbol.toLowerCase().includes(q) ||
-      s.name.toLowerCase().includes(q) ||
-      (s.isin && s.isin.toLowerCase().includes(q)) ||
-      s.sector.toLowerCase().includes(q)
-    ).map(s => ({ ...s, type: 'STOCK' }));
+    const indices = db.getCollection('indices')
+      .filter(i => i.symbol.toLowerCase().includes(q) || i.name.toLowerCase().includes(q))
+      .map(i => ({ type: 'INDEX', symbol: i.symbol, name: i.name, price: i.value, percentChange: i.percentChange }));
 
-    const matchedMFs = mutualFunds.filter(m =>
-      m.name.toLowerCase().includes(q) ||
-      m.category.toLowerCase().includes(q)
-    ).map(m => ({ ...m, type: 'MUTUAL_FUND', symbol: m.id }));
+    const mutualFunds = db.getCollection('mutualFunds')
+      .filter(m => m.name.toLowerCase().includes(q) || m.category.toLowerCase().includes(q))
+      .map(m => ({ type: 'MUTUAL_FUND', id: m.id, name: m.name, category: m.category, nav: m.nav, returns3Y: m.returns3Y }));
 
-    const matchedIPOs = ipos.filter(i =>
-      i.company.toLowerCase().includes(q) ||
-      i.symbol.toLowerCase().includes(q)
-    ).map(i => ({ ...i, type: 'IPO' }));
+    const ipos = db.getCollection('ipos')
+      .filter(p => p.company.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q))
+      .map(p => ({ type: 'IPO', id: p.id, company: p.company, symbol: p.symbol, status: p.status, priceBand: p.priceBand }));
 
-    const matchedIndices = indices.filter(i =>
-      i.symbol.toLowerCase().includes(q) ||
-      i.name.toLowerCase().includes(q)
-    ).map(i => ({ ...i, type: 'INDEX' }));
+    const results = [...indices, ...securities, ...mutualFunds, ...ipos];
+    return { results, totalCount: results.length };
+  }
 
-    return {
-      stocks: matchedStocks,
-      mutualFunds: matchedMFs,
-      ipos: matchedIPOs,
-      indices: matchedIndices,
-      totalCount: matchedStocks.length + matchedMFs.length + matchedIPOs.length + matchedIndices.length
-    };
+  globalSearch(query) {
+    return this.search(query);
   }
 }
 

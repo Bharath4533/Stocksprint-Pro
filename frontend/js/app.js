@@ -1,4 +1,4 @@
-// Main Application Controller & Router for NexTrade Pro
+// Main Application Controller & Router for StockSprint Pro
 
 const App = {
   routes: {

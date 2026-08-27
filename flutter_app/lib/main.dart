@@ -9,11 +9,11 @@ import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const NexTradeProApp());
+  runApp(const StockSprintProApp());
 }
 
-class NexTradeProApp extends StatelessWidget {
-  const NexTradeProApp({Key? key}) : super(key: key);
+class StockSprintProApp extends StatelessWidget {
+  const StockSprintProApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class NexTradeProApp extends StatelessWidget {
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) {
           return MaterialApp(
-            title: 'NexTrade Pro',
+            title: 'StockSprint Pro',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

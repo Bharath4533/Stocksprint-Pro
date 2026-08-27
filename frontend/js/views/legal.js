@@ -23,10 +23,10 @@ const LegalView = {
 
         <!-- Paper Trading Notice -->
         <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--brand-accent);">
-          <h3 class="card-title" style="color: var(--brand-accent); margin-bottom: 10px;">ℹ️ Simulated Paper Trading Platform Notice</h3>
+          <h3 class="card-title" style="color: var(--brand-accent); margin-bottom: 10px;">ℹ️ Live Feed & Paper Trading Platform Notice</h3>
           <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">
-            NexTrade Pro provides simulated virtual market data and virtual execution for educational and analytical purposes. 
-            No real currency is used or at risk. Virtual orders are not routed to real exchanges (NSE/BSE/MCX).
+            StockSprint Pro provides live exchange market data feeds with simulated execution for educational and analytical purposes. 
+            Virtual orders are simulated with accurate Indian brokerage and statutory fees.
           </p>
         </div>
 

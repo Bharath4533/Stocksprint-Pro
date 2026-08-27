@@ -51,12 +51,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: const Text(
-                'N',
+                'S',
                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 16),
               ),
             ),
             const SizedBox(width: 8),
-            const Text('NexTrade Pro', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+            const Text('StockSprint Pro', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
           ],
         ),
         actions: [

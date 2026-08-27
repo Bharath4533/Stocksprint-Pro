@@ -2,7 +2,7 @@
   "user": {
     "name": "Bharath",
     "email": "bharath@example.com",
-    "tradingBalance": 119186.3,
+    "tradingBalance": null,
     "cash": 85000
   },
   "stocks": [
@@ -129,6 +129,24 @@
     ]
   },
   "orders": [
+    {
+      "id": "ORD1006",
+      "symbol": "SUZLON",
+      "side": "BUY",
+      "qty": null,
+      "price": 72.2,
+      "status": "Completed",
+      "date": "2026-08-27"
+    },
+    {
+      "id": "ORD1005",
+      "symbol": "INFY",
+      "side": "BUY",
+      "qty": null,
+      "price": 1860.1,
+      "status": "Completed",
+      "date": "2026-08-27"
+    },
     {
       "id": "ORD1004",
       "symbol": "HCLTECH",

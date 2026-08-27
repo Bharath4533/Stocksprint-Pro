@@ -1,0 +1,1972 @@
+{
+  "users": [
+    {
+      "id": "usr_demo_1001",
+      "email": "demo@nextrade.in",
+      "passwordHash": "$2a$10$wT5HwI0V4dG8lS8d5eA5xOp6m0dG8lS8d5eA5xOp6m0dG8lS8d5eA",
+      "name": "Bharath Devan",
+      "phone": "+91 98765 43210",
+      "role": "USER",
+      "isDemo": true,
+      "kycStatus": "VERIFIED",
+      "pan": "ABCDE1234F",
+      "dob": "1996-05-14",
+      "address": "42 Financial District, Cyber City, Hyderabad, 500081",
+      "bankAccount": {
+        "bankName": "HDFC Bank",
+        "accountNumber": "50100492837192",
+        "ifsc": "HDFC0001234",
+        "accountType": "Savings",
+        "isVerified": true
+      },
+      "nominee": {
+        "name": "Ananya Devan",
+        "relation": "Spouse",
+        "sharePercentage": 100
+      },
+      "riskProfile": "GROWTH",
+      "twoFactorEnabled": false,
+      "themePreference": "dark",
+      "createdAt": "2026-01-10T10:00:00.000Z"
+    },
+    {
+      "id": "usr_admin_1001",
+      "email": "admin@nextrade.in",
+      "passwordHash": "$2a$10$wT5HwI0V4dG8lS8d5eA5xOp6m0dG8lS8d5eA5xOp6m0dG8lS8d5eA",
+      "name": "System Administrator",
+      "phone": "+91 99999 88888",
+      "role": "ADMIN",
+      "isDemo": false,
+      "kycStatus": "VERIFIED",
+      "pan": "ADMIN9999Z",
+      "dob": "1990-01-01",
+      "address": "NexTrade Towers, BKC, Mumbai, Maharashtra 400051",
+      "bankAccount": {
+        "bankName": "State Bank of India",
+        "accountNumber": "30198273645",
+        "ifsc": "SBIN0000300",
+        "accountType": "Current",
+        "isVerified": true
+      },
+      "riskProfile": "AGGRESSIVE",
+      "twoFactorEnabled": true,
+      "themePreference": "dark",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "funds": [
+    {
+      "userId": "usr_demo_1001",
+      "availableCash": 353716.86,
+      "usedMargin": 140262.28,
+      "totalSimulatedCapital": 500000,
+      "withdrawableAmount": 415000,
+      "pendingDeposits": 0,
+      "pendingWithdrawals": 0,
+      "updatedAt": "2026-08-27T08:00:00.000Z"
+    },
+    {
+      "userId": "usr_admin_1001",
+      "availableCash": 10000000,
+      "usedMargin": 0,
+      "totalSimulatedCapital": 10000000,
+      "withdrawableAmount": 10000000,
+      "pendingDeposits": 0,
+      "pendingWithdrawals": 0,
+      "updatedAt": "2026-08-27T08:00:00.000Z"
+    }
+  ],
+  "indices": [
+    {
+      "symbol": "NIFTY 50",
+      "name": "Nifty 50 Index",
+      "value": 25361.01,
+      "change": 677.91,
+      "percentChange": 2.75,
+      "high": 25532.65,
+      "low": 24569.5,
+      "prevClose": 24683.1
+    },
+    {
+      "symbol": "SENSEX",
+      "name": "BSE Sensex Index",
+      "value": 82338.61,
+      "change": 1253.46,
+      "percentChange": 1.55,
+      "high": 84268.82,
+      "low": 80723.19,
+      "prevClose": 81085.15
+    },
+    {
+      "symbol": "BANK NIFTY",
+      "name": "Nifty Bank Index",
+      "value": 50258.7,
+      "change": -1067.5,
+      "percentChange": -2.08,
+      "high": 51500,
+      "low": 50021.92,
+      "prevClose": 51326.2
+    },
+    {
+      "symbol": "NIFTY IT",
+      "name": "Nifty IT Index",
+      "value": 41861.41,
+      "change": 621.71,
+      "percentChange": 1.51,
+      "high": 42186,
+      "low": 41055.92,
+      "prevClose": 41239.7
+    },
+    {
+      "symbol": "NIFTY AUTO",
+      "name": "Nifty Auto Index",
+      "value": 25924.28,
+      "change": 809.53,
+      "percentChange": 3.22,
+      "high": 26051.87,
+      "low": 25180,
+      "prevClose": 25114.75
+    },
+    {
+      "symbol": "NIFTY PHARMA",
+      "name": "Nifty Pharma Index",
+      "value": 23119.46,
+      "change": 781.76,
+      "percentChange": 3.5,
+      "high": 23574.57,
+      "low": 22350,
+      "prevClose": 22337.7
+    },
+    {
+      "symbol": "NIFTY MIDCAP 100",
+      "name": "Nifty Midcap 100 Index",
+      "value": 58940.37,
+      "change": 610.77,
+      "percentChange": 1.05,
+      "high": 60237.98,
+      "low": 58400,
+      "prevClose": 58329.6
+    }
+  ],
+  "securities": [
+    {
+      "symbol": "RELIANCE",
+      "name": "Reliance Industries Limited",
+      "isin": "INE002A01018",
+      "exchange": "NSE",
+      "price": 3084.57,
+      "change": 123.77,
+      "percentChange": 4.18,
+      "open": 2965,
+      "high": 3144.93,
+      "low": 2919.44,
+      "prevClose": 2960.8,
+      "volume": 4134944,
+      "value": 12754524214,
+      "cap": "Large Cap",
+      "sector": "Energy & Conglomerate",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹20,18,500 Cr",
+        "pe": 28.4,
+        "pb": 2.65,
+        "eps": 105.12,
+        "roe": "9.85%",
+        "roce": "10.42%",
+        "divYield": "0.34%",
+        "debtToEquity": 0.38,
+        "high52": 3217.9,
+        "low52": 2220.3,
+        "faceValue": 10,
+        "bookValue": 1126.6
+      },
+      "financials": {
+        "revenue": {
+          "2023": 892809,
+          "2024": 997540,
+          "2025": 1085400,
+          "2026": 1192000
+        },
+        "profit": {
+          "2023": 66702,
+          "2024": 69621,
+          "2025": 78400,
+          "2026": 85100
+        },
+        "eps": {
+          "2023": 98.6,
+          "2024": 102.9,
+          "2025": 115.8,
+          "2026": 125.7
+        }
+      }
+    },
+    {
+      "symbol": "TCS",
+      "name": "Tata Consultancy Services Limited",
+      "isin": "INE467B01029",
+      "exchange": "NSE",
+      "price": 4367.98,
+      "change": 242.68,
+      "percentChange": 5.88,
+      "open": 4135,
+      "high": 4485.75,
+      "low": 4125,
+      "prevClose": 4125.3,
+      "volume": 2108689,
+      "value": 9210711378,
+      "cap": "Large Cap",
+      "sector": "IT Services",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹15,24,000 Cr",
+        "pe": 32.1,
+        "pb": 14.8,
+        "eps": 131.18,
+        "roe": "46.2%",
+        "roce": "58.7%",
+        "divYield": "1.25%",
+        "debtToEquity": 0,
+        "high52": 4585,
+        "low52": 3313,
+        "faceValue": 1,
+        "bookValue": 284.5
+      },
+      "financials": {
+        "revenue": {
+          "2023": 225458,
+          "2024": 240893,
+          "2025": 265000,
+          "2026": 289400
+        },
+        "profit": {
+          "2023": 42147,
+          "2024": 45908,
+          "2025": 51200,
+          "2026": 56800
+        },
+        "eps": {
+          "2023": 115.2,
+          "2024": 125.4,
+          "2025": 139.8,
+          "2026": 155.1
+        }
+      }
+    },
+    {
+      "symbol": "INFY",
+      "name": "Infosys Limited",
+      "isin": "INE009A01021",
+      "exchange": "NSE",
+      "price": 1989.25,
+      "change": 129.15,
+      "percentChange": 6.94,
+      "open": 1865,
+      "high": 1993.02,
+      "low": 1858,
+      "prevClose": 1860.1,
+      "volume": 4233139,
+      "value": 8420771756,
+      "cap": "Large Cap",
+      "sector": "IT Services",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹7,86,500 Cr",
+        "pe": 29.8,
+        "pb": 8.92,
+        "eps": 63.56,
+        "roe": "31.4%",
+        "roce": "40.1%",
+        "divYield": "2.10%",
+        "debtToEquity": 0.08,
+        "high52": 1991.45,
+        "low52": 1358.35,
+        "faceValue": 5,
+        "bookValue": 212.35
+      },
+      "financials": {
+        "revenue": {
+          "2023": 146767,
+          "2024": 153670,
+          "2025": 169000,
+          "2026": 184500
+        },
+        "profit": {
+          "2023": 24095,
+          "2024": 26233,
+          "2025": 29100,
+          "2026": 32400
+        },
+        "eps": {
+          "2023": 57.6,
+          "2024": 63.1,
+          "2025": 70,
+          "2026": 77.9
+        }
+      }
+    },
+    {
+      "symbol": "HDFCBANK",
+      "name": "HDFC Bank Limited",
+      "isin": "INE040A01034",
+      "exchange": "NSE",
+      "price": 1967.7,
+      "change": 12.1,
+      "percentChange": 0.62,
+      "open": 1958,
+      "high": 2023.48,
+      "low": 1919.9,
+      "prevClose": 1955.6,
+      "volume": 6484957,
+      "value": 12760449889,
+      "cap": "Large Cap",
+      "sector": "Banking & Financial Services",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹15,02,000 Cr",
+        "pe": 19.4,
+        "pb": 2.78,
+        "eps": 101.78,
+        "roe": "16.8%",
+        "roce": "8.95%",
+        "divYield": "1.02%",
+        "debtToEquity": 6.85,
+        "high52": 2040,
+        "low52": 1363.55,
+        "faceValue": 1,
+        "bookValue": 710.25
+      },
+      "financials": {
+        "revenue": {
+          "2023": 170754,
+          "2024": 285500,
+          "2025": 335000,
+          "2026": 385000
+        },
+        "profit": {
+          "2023": 44108,
+          "2024": 60812,
+          "2025": 71200,
+          "2026": 82500
+        },
+        "eps": {
+          "2023": 79.3,
+          "2024": 92.5,
+          "2025": 108.3,
+          "2026": 125.4
+        }
+      }
+    },
+    {
+      "symbol": "ICICIBANK",
+      "name": "ICICI Bank Limited",
+      "isin": "INE090A01021",
+      "exchange": "NSE",
+      "price": 1380.43,
+      "change": 70.03,
+      "percentChange": 5.34,
+      "open": 1312,
+      "high": 1384.91,
+      "low": 1308,
+      "prevClose": 1310.4,
+      "volume": 5137487,
+      "value": 7091941179,
+      "cap": "Large Cap",
+      "sector": "Banking & Financial Services",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹9,31,000 Cr",
+        "pe": 18.2,
+        "pb": 3.12,
+        "eps": 72.79,
+        "roe": "18.4%",
+        "roce": "9.12%",
+        "divYield": "0.78%",
+        "debtToEquity": 5.92,
+        "high52": 1390,
+        "low52": 930,
+        "faceValue": 2,
+        "bookValue": 424.6
+      },
+      "financials": {
+        "revenue": {
+          "2023": 121067,
+          "2024": 158500,
+          "2025": 188000,
+          "2026": 218000
+        },
+        "profit": {
+          "2023": 31896,
+          "2024": 40888,
+          "2025": 48200,
+          "2026": 55400
+        },
+        "eps": {
+          "2023": 48.2,
+          "2024": 58.4,
+          "2025": 68.8,
+          "2026": 79.1
+        }
+      }
+    },
+    {
+      "symbol": "SBIN",
+      "name": "State Bank of India",
+      "isin": "INE062A01020",
+      "exchange": "NSE",
+      "price": 899.77,
+      "change": 48.27,
+      "percentChange": 5.67,
+      "open": 852,
+      "high": 899.77,
+      "low": 841,
+      "prevClose": 851.5,
+      "volume": 8685416,
+      "value": 7814876754,
+      "cap": "Large Cap",
+      "sector": "Public Sector Banking",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹7,54,200 Cr",
+        "pe": 10.9,
+        "pb": 1.75,
+        "eps": 77.54,
+        "roe": "17.2%",
+        "roce": "7.84%",
+        "divYield": "1.65%",
+        "debtToEquity": 11.2,
+        "high52": 912.1,
+        "low52": 560.2,
+        "faceValue": 1,
+        "bookValue": 483
+      },
+      "financials": {
+        "revenue": {
+          "2023": 368000,
+          "2024": 442000,
+          "2025": 498000,
+          "2026": 558000
+        },
+        "profit": {
+          "2023": 50232,
+          "2024": 61077,
+          "2025": 68500,
+          "2026": 76200
+        },
+        "eps": {
+          "2023": 56.3,
+          "2024": 68.4,
+          "2025": 76.7,
+          "2026": 85.3
+        }
+      }
+    },
+    {
+      "symbol": "BHARTIARTL",
+      "name": "Bharti Airtel Limited",
+      "isin": "INE397D01024",
+      "exchange": "NSE",
+      "price": 1708.63,
+      "change": 32.33,
+      "percentChange": 1.93,
+      "open": 1680,
+      "high": 1715.73,
+      "low": 1615.13,
+      "prevClose": 1676.3,
+      "volume": 3183461,
+      "value": 5439356968,
+      "cap": "Large Cap",
+      "sector": "Telecommunications",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹9,85,000 Cr",
+        "pe": 65.4,
+        "pb": 10.4,
+        "eps": 25.96,
+        "roe": "16.1%",
+        "roce": "14.2%",
+        "divYield": "0.48%",
+        "debtToEquity": 2.45,
+        "high52": 1780,
+        "low52": 915,
+        "faceValue": 5,
+        "bookValue": 163.3
+      },
+      "financials": {
+        "revenue": {
+          "2023": 139145,
+          "2024": 149982,
+          "2025": 168000,
+          "2026": 189000
+        },
+        "profit": {
+          "2023": 8346,
+          "2024": 7467,
+          "2025": 12800,
+          "2026": 17500
+        },
+        "eps": {
+          "2023": 14.8,
+          "2024": 13.2,
+          "2025": 22.6,
+          "2026": 30.9
+        }
+      }
+    },
+    {
+      "symbol": "ITC",
+      "name": "ITC Limited",
+      "isin": "INE154A01025",
+      "exchange": "NSE",
+      "price": 523.01,
+      "change": 27.21,
+      "percentChange": 5.49,
+      "open": 496,
+      "high": 525.32,
+      "low": 494.06,
+      "prevClose": 495.8,
+      "volume": 7487565,
+      "value": 3916071371,
+      "cap": "Large Cap",
+      "sector": "FMCG & Diversified",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹6,30,400 Cr",
+        "pe": 30.2,
+        "pb": 8.45,
+        "eps": 16.71,
+        "roe": "28.5%",
+        "roce": "37.4%",
+        "divYield": "2.85%",
+        "debtToEquity": 0,
+        "high52": 528.5,
+        "low52": 399.3,
+        "faceValue": 1,
+        "bookValue": 59.7
+      },
+      "financials": {
+        "revenue": {
+          "2023": 69480,
+          "2024": 74800,
+          "2025": 81500,
+          "2026": 89200
+        },
+        "profit": {
+          "2023": 18753,
+          "2024": 20422,
+          "2025": 22800,
+          "2026": 25400
+        },
+        "eps": {
+          "2023": 15.1,
+          "2024": 16.4,
+          "2025": 18.3,
+          "2026": 20.4
+        }
+      }
+    },
+    {
+      "symbol": "LT",
+      "name": "Larsen & Toubro Limited",
+      "isin": "INE018A01030",
+      "exchange": "NSE",
+      "price": 3836.88,
+      "change": 124.18,
+      "percentChange": 3.34,
+      "open": 3715,
+      "high": 3898.71,
+      "low": 3640.54,
+      "prevClose": 3712.7,
+      "volume": 1536863,
+      "value": 5896758907,
+      "cap": "Large Cap",
+      "sector": "Infrastructure & Engineering",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹5,06,200 Cr",
+        "pe": 37.8,
+        "pb": 5.42,
+        "eps": 97.36,
+        "roe": "15.4%",
+        "roce": "16.8%",
+        "divYield": "0.92%",
+        "debtToEquity": 1.28,
+        "high52": 3948.6,
+        "low52": 2865,
+        "faceValue": 2,
+        "bookValue": 679
+      },
+      "financials": {
+        "revenue": {
+          "2023": 183341,
+          "2024": 221113,
+          "2025": 252000,
+          "2026": 288000
+        },
+        "profit": {
+          "2023": 10471,
+          "2024": 13059,
+          "2025": 15800,
+          "2026": 19200
+        },
+        "eps": {
+          "2023": 74.5,
+          "2024": 92.9,
+          "2025": 112.4,
+          "2026": 136.6
+        }
+      }
+    },
+    {
+      "symbol": "MARUTI",
+      "name": "Maruti Suzuki India Limited",
+      "isin": "INE585B01010",
+      "exchange": "NSE",
+      "price": 12791.08,
+      "change": 491.08,
+      "percentChange": 3.99,
+      "open": 12320,
+      "high": 13024.45,
+      "low": 12300,
+      "prevClose": 12300,
+      "volume": 659299,
+      "value": 8433146253,
+      "cap": "Large Cap",
+      "sector": "Automobile",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹3,92,400 Cr",
+        "pe": 28.6,
+        "pb": 4.18,
+        "eps": 436.36,
+        "roe": "17.5%",
+        "roce": "22.8%",
+        "divYield": "1.00%",
+        "debtToEquity": 0.01,
+        "high52": 13680,
+        "low52": 9500,
+        "faceValue": 5,
+        "bookValue": 2985.6
+      },
+      "financials": {
+        "revenue": {
+          "2023": 117571,
+          "2024": 140933,
+          "2025": 158000,
+          "2026": 176000
+        },
+        "profit": {
+          "2023": 8049,
+          "2024": 13209,
+          "2025": 15400,
+          "2026": 17800
+        },
+        "eps": {
+          "2023": 266.5,
+          "2024": 437.3,
+          "2025": 509.9,
+          "2026": 589.4
+        }
+      }
+    },
+    {
+      "symbol": "TATAMOTORS",
+      "name": "Tata Motors Limited",
+      "isin": "INE155A01022",
+      "exchange": "NSE",
+      "price": 1075.38,
+      "change": 58.18,
+      "percentChange": 5.72,
+      "open": 1020,
+      "high": 1092.95,
+      "low": 1018,
+      "prevClose": 1017.2,
+      "volume": 10088908,
+      "value": 10849409885,
+      "cap": "Large Cap",
+      "sector": "Automobile & EV",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹3,85,000 Cr",
+        "pe": 12.8,
+        "pb": 4.12,
+        "eps": 81.68,
+        "roe": "41.2%",
+        "roce": "21.6%",
+        "divYield": "0.57%",
+        "debtToEquity": 0.85,
+        "high52": 1179,
+        "low52": 593.5,
+        "faceValue": 2,
+        "bookValue": 253.78
+      },
+      "financials": {
+        "revenue": {
+          "2023": 345967,
+          "2024": 437928,
+          "2025": 482000,
+          "2026": 530000
+        },
+        "profit": {
+          "2023": 2414,
+          "2024": 31399,
+          "2025": 36500,
+          "2026": 42000
+        },
+        "eps": {
+          "2023": 7.1,
+          "2024": 82,
+          "2025": 95.3,
+          "2026": 109.6
+        }
+      }
+    },
+    {
+      "symbol": "ZOMATO",
+      "name": "Zomato Limited",
+      "isin": "INE758T01015",
+      "exchange": "NSE",
+      "price": 291.41,
+      "change": 30.11,
+      "percentChange": 11.52,
+      "open": 262,
+      "high": 296.75,
+      "low": 260.5,
+      "prevClose": 261.3,
+      "volume": 24790402,
+      "value": 7224171047,
+      "cap": "Large Cap",
+      "sector": "Consumer Internet & Tech",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹2,40,800 Cr",
+        "pe": 185,
+        "pb": 11.4,
+        "eps": 1.47,
+        "roe": "6.8%",
+        "roce": "8.1%",
+        "divYield": "0.00%",
+        "debtToEquity": 0.02,
+        "high52": 298,
+        "low52": 88,
+        "faceValue": 1,
+        "bookValue": 23.9
+      },
+      "financials": {
+        "revenue": {
+          "2023": 7079,
+          "2024": 12114,
+          "2025": 18200,
+          "2026": 26500
+        },
+        "profit": {
+          "2023": -971,
+          "2024": 351,
+          "2025": 1450,
+          "2026": 2800
+        },
+        "eps": {
+          "2023": -1.1,
+          "2024": 0.4,
+          "2025": 1.6,
+          "2026": 3.1
+        }
+      }
+    },
+    {
+      "symbol": "SUZLON",
+      "name": "Suzlon Energy Limited",
+      "isin": "INE040H01021",
+      "exchange": "NSE",
+      "price": 71.81,
+      "change": 0.46,
+      "percentChange": 0.64,
+      "open": 72,
+      "high": 76.77,
+      "low": 70.47,
+      "prevClose": 71.35,
+      "volume": 36787373,
+      "value": 2641701255,
+      "cap": "Mid Cap",
+      "sector": "Renewable Energy",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹1,02,100 Cr",
+        "pe": 92.4,
+        "pb": 26.8,
+        "eps": 0.81,
+        "roe": "29.4%",
+        "roce": "24.1%",
+        "divYield": "0.00%",
+        "debtToEquity": 0.05,
+        "high52": 86.04,
+        "low52": 21.65,
+        "faceValue": 2,
+        "bookValue": 2.79
+      },
+      "financials": {
+        "revenue": {
+          "2023": 5947,
+          "2024": 6529,
+          "2025": 9200,
+          "2026": 12800
+        },
+        "profit": {
+          "2023": 2887,
+          "2024": 660,
+          "2025": 1150,
+          "2026": 1820
+        },
+        "eps": {
+          "2023": 2.8,
+          "2024": 0.5,
+          "2025": 0.8,
+          "2026": 1.3
+        }
+      }
+    },
+    {
+      "symbol": "TRENT",
+      "name": "Trent Limited",
+      "isin": "INE849A01020",
+      "exchange": "NSE",
+      "price": 7476.41,
+      "change": 601.41,
+      "percentChange": 8.75,
+      "open": 6900,
+      "high": 7671.89,
+      "low": 6880,
+      "prevClose": 6875,
+      "volume": 1704265,
+      "value": 12741783889,
+      "cap": "Large Cap",
+      "sector": "Retail & Fashion",
+      "lotSize": 1,
+      "fundamentals": {
+        "marketCap": "₹2,53,000 Cr",
+        "pe": 168,
+        "pb": 48.2,
+        "eps": 42.38,
+        "roe": "34.2%",
+        "roce": "28.5%",
+        "divYield": "0.05%",
+        "debtToEquity": 0.12,
+        "high52": 8345,
+        "low52": 1945,
+        "faceValue": 1,
+        "bookValue": 147.7
+      },
+      "financials": {
+        "revenue": {
+          "2023": 8242,
+          "2024": 12375,
+          "2025": 17800,
+          "2026": 24500
+        },
+        "profit": {
+          "2023": 394,
+          "2024": 1477,
+          "2025": 2350,
+          "2026": 3600
+        },
+        "eps": {
+          "2023": 11.1,
+          "2024": 41.5,
+          "2025": 66.1,
+          "2026": 101.3
+        }
+      }
+    }
+  ],
+  "mutualFunds": [
+    {
+      "id": "mf_parag_parikh_flexi",
+      "name": "Parag Parikh Flexi Cap Fund",
+      "category": "Equity - Flexi Cap",
+      "nav": 78.45,
+      "change": 0.65,
+      "returns1Y": "28.4%",
+      "returns3Y": "22.8%",
+      "returns5Y": "24.5%",
+      "aum": "₹74,250 Cr",
+      "expenseRatio": "0.62%",
+      "risk": "Very High",
+      "minSipAmount": 1000,
+      "minLumpsum": 1000,
+      "fundManager": "Rajeev Thakkar",
+      "topHoldings": [
+        "HDFC Bank",
+        "Bajaj Holdings",
+        "ITC",
+        "Power Grid",
+        "Coal India"
+      ]
+    },
+    {
+      "id": "mf_quant_small_cap",
+      "name": "Quant Small Cap Fund",
+      "category": "Equity - Small Cap",
+      "nav": 245.12,
+      "change": 1.25,
+      "returns1Y": "41.2%",
+      "returns3Y": "32.6%",
+      "returns5Y": "38.4%",
+      "aum": "₹26,800 Cr",
+      "expenseRatio": "0.75%",
+      "risk": "Very High",
+      "minSipAmount": 1000,
+      "minLumpsum": 5000,
+      "fundManager": "Sandeep Tandon",
+      "topHoldings": [
+        "Reliance Industries",
+        "Jio Financial",
+        "Adani Power",
+        "Bikaji Foods"
+      ]
+    },
+    {
+      "id": "mf_mirae_large_cap",
+      "name": "Mirae Asset Large Cap Fund",
+      "category": "Equity - Large Cap",
+      "nav": 118.9,
+      "change": 0.42,
+      "returns1Y": "22.6%",
+      "returns3Y": "16.8%",
+      "returns5Y": "18.2%",
+      "aum": "₹38,400 Cr",
+      "expenseRatio": "0.54%",
+      "risk": "Very High",
+      "minSipAmount": 500,
+      "minLumpsum": 5000,
+      "fundManager": "Gaurav Misra",
+      "topHoldings": [
+        "HDFC Bank",
+        "ICICI Bank",
+        "Reliance Industries",
+        "Infosys",
+        "L&T"
+      ]
+    },
+    {
+      "id": "mf_hdfc_balanced_advantage",
+      "name": "HDFC Balanced Advantage Fund",
+      "category": "Hybrid - Balanced Advantage",
+      "nav": 465.3,
+      "change": 0.35,
+      "returns1Y": "24.1%",
+      "returns3Y": "19.5%",
+      "returns5Y": "20.2%",
+      "aum": "₹89,500 Cr",
+      "expenseRatio": "0.78%",
+      "risk": "High",
+      "minSipAmount": 500,
+      "minLumpsum": 1000,
+      "fundManager": "Gopal Agrawal",
+      "topHoldings": [
+        "HDFC Bank",
+        "ICICI Bank",
+        "Coal India",
+        "State Bank of India"
+      ]
+    }
+  ],
+  "sips": [
+    {
+      "id": "sip_1001",
+      "userId": "usr_demo_1001",
+      "fundId": "mf_parag_parikh_flexi",
+      "fundName": "Parag Parikh Flexi Cap Fund",
+      "amount": 5000,
+      "frequency": "Monthly",
+      "sipDate": 10,
+      "status": "Active",
+      "installmentsPaid": 6,
+      "totalInvested": 30000,
+      "currentValue": 34850,
+      "nextDueDate": "2026-09-10"
+    },
+    {
+      "id": "sip_1787807737319",
+      "userId": "usr_demo_1001",
+      "fundId": "mf_parag_parikh_flexi",
+      "fundName": "Parag Parikh Flexi Cap Fund",
+      "amount": 2000,
+      "frequency": "Monthly",
+      "sipDate": 10,
+      "status": "Active",
+      "installmentsPaid": 1,
+      "totalInvested": 2000,
+      "currentValue": 2000,
+      "nextDueDate": "2026-09-10",
+      "createdAt": "2026-08-27T05:15:37.319Z"
+    },
+    {
+      "id": "sip_1787807799452",
+      "userId": "usr_demo_1001",
+      "fundId": "mf_parag_parikh_flexi",
+      "fundName": "Parag Parikh Flexi Cap Fund",
+      "amount": 2000,
+      "frequency": "Monthly",
+      "sipDate": 10,
+      "status": "Active",
+      "installmentsPaid": 1,
+      "totalInvested": 2000,
+      "currentValue": 2000,
+      "nextDueDate": "2026-09-10",
+      "createdAt": "2026-08-27T05:16:39.452Z"
+    },
+    {
+      "id": "sip_1787811673896",
+      "userId": "usr_demo_1001",
+      "fundId": "mf_parag_parikh_flexi",
+      "fundName": "Parag Parikh Flexi Cap Fund",
+      "amount": 2000,
+      "frequency": "Monthly",
+      "sipDate": 10,
+      "status": "Active",
+      "installmentsPaid": 1,
+      "totalInvested": 2000,
+      "currentValue": 2000,
+      "nextDueDate": "2026-09-10",
+      "createdAt": "2026-08-27T06:21:13.896Z"
+    }
+  ],
+  "ipos": [
+    {
+      "id": "ipo_swiggy_101",
+      "company": "Swiggy Limited",
+      "symbol": "SWIGGY",
+      "status": "OPEN",
+      "issueSize": "₹11,327 Cr",
+      "priceBand": "₹371 - ₹390",
+      "lotSize": 38,
+      "minInvestment": 14820,
+      "openDate": "2026-08-25",
+      "closeDate": "2026-08-28",
+      "listingDate": "2026-09-04",
+      "subscription": "2.45x",
+      "gmp": "+₹28 (7.1%)",
+      "description": "Leading on-demand convenience and food delivery platform connecting consumers with restaurant partners."
+    },
+    {
+      "id": "ipo_hyundai_102",
+      "company": "Hyundai Motor India Limited",
+      "symbol": "HYUNDAI",
+      "status": "UPCOMING",
+      "issueSize": "₹27,870 Cr",
+      "priceBand": "₹1,865 - ₹1,960",
+      "lotSize": 7,
+      "minInvestment": 13720,
+      "openDate": "2026-09-15",
+      "closeDate": "2026-09-18",
+      "listingDate": "2026-09-24",
+      "subscription": "-",
+      "gmp": "+₹145 (7.4%)",
+      "description": "Second largest passenger vehicle manufacturer in India with a 15% domestic market share."
+    },
+    {
+      "id": "ipo_ola_electric_103",
+      "company": "Ola Electric Mobility Limited",
+      "symbol": "OLAELEC",
+      "status": "LISTED",
+      "issueSize": "₹6,145 Cr",
+      "priceBand": "₹72 - ₹76",
+      "lotSize": 195,
+      "minInvestment": 14820,
+      "openDate": "2026-08-02",
+      "closeDate": "2026-08-06",
+      "listingDate": "2026-08-09",
+      "subscription": "4.45x",
+      "gmp": "+₹15",
+      "description": "Pure-play electric vehicle and battery manufacturing company."
+    }
+  ],
+  "ipoApplications": [
+    {
+      "id": "ipo_app_9001",
+      "userId": "usr_demo_1001",
+      "ipoId": "ipo_swiggy_101",
+      "company": "Swiggy Limited",
+      "lots": 1,
+      "shares": 38,
+      "bidPrice": 390,
+      "amountBlocked": 14820,
+      "upiId": "bharath@okhdfcbank",
+      "status": "Submitted",
+      "appliedAt": "2026-08-26T11:30:00.000Z"
+    },
+    {
+      "id": "ipo_app_1787807737360",
+      "userId": "usr_demo_1001",
+      "ipoId": "ipo_swiggy_101",
+      "company": "Swiggy Limited",
+      "lots": 1,
+      "shares": 38,
+      "bidPrice": 390,
+      "amountBlocked": 14820,
+      "upiId": "test@okaxis",
+      "status": "Submitted",
+      "appliedAt": "2026-08-27T05:15:37.360Z"
+    },
+    {
+      "id": "ipo_app_1787807799454",
+      "userId": "usr_demo_1001",
+      "ipoId": "ipo_swiggy_101",
+      "company": "Swiggy Limited",
+      "lots": 1,
+      "shares": 38,
+      "bidPrice": 390,
+      "amountBlocked": 14820,
+      "upiId": "test@okaxis",
+      "status": "Submitted",
+      "appliedAt": "2026-08-27T05:16:39.454Z"
+    },
+    {
+      "id": "ipo_app_1787811673909",
+      "userId": "usr_demo_1001",
+      "ipoId": "ipo_swiggy_101",
+      "company": "Swiggy Limited",
+      "lots": 1,
+      "shares": 38,
+      "bidPrice": 390,
+      "amountBlocked": 14820,
+      "upiId": "test@okaxis",
+      "status": "Submitted",
+      "appliedAt": "2026-08-27T06:21:13.909Z"
+    }
+  ],
+  "watchlists": [
+    {
+      "id": "wl_default_1001",
+      "userId": "usr_demo_1001",
+      "name": "My Watchlist",
+      "symbols": [
+        "RELIANCE",
+        "TCS",
+        "INFY",
+        "HDFCBANK",
+        "SUZLON"
+      ],
+      "createdAt": "2026-01-10T10:00:00.000Z"
+    },
+    {
+      "id": "wl_tech_1002",
+      "userId": "usr_demo_1001",
+      "name": "Tech & High Growth",
+      "symbols": [
+        "TCS",
+        "INFY",
+        "ZOMATO",
+        "TRENT"
+      ],
+      "createdAt": "2026-01-15T12:00:00.000Z"
+    }
+  ],
+  "holdings": [
+    {
+      "id": "hld_101",
+      "userId": "usr_demo_1001",
+      "symbol": "TCS",
+      "quantity": 10,
+      "averageBuyPrice": 4120,
+      "investedValue": 41200,
+      "currentPrice": 4210.8,
+      "currentValue": 42108,
+      "unrealizedPnL": 908,
+      "unrealizedPnLPercent": 2.2,
+      "productType": "CNC"
+    },
+    {
+      "id": "hld_102",
+      "userId": "usr_demo_1001",
+      "symbol": "INFY",
+      "quantity": 19,
+      "averageBuyPrice": 1858.32,
+      "investedValue": 35308.08,
+      "currentPrice": 1966.68,
+      "currentValue": 37366.92,
+      "unrealizedPnL": 2058.84,
+      "unrealizedPnLPercent": 5.83,
+      "productType": "CNC"
+    },
+    {
+      "id": "hld_103",
+      "userId": "usr_demo_1001",
+      "symbol": "RELIANCE",
+      "quantity": 6,
+      "averageBuyPrice": 2949.04,
+      "investedValue": 17694.24,
+      "currentPrice": 3094.24,
+      "currentValue": 18565.44,
+      "unrealizedPnL": 871.2,
+      "unrealizedPnLPercent": 4.92,
+      "productType": "CNC"
+    }
+  ],
+  "positions": [
+    {
+      "id": "pos_201",
+      "userId": "usr_demo_1001",
+      "symbol": "TATAMOTORS",
+      "quantity": 20,
+      "averagePrice": 1030,
+      "currentPrice": 1045.6,
+      "side": "BUY",
+      "productType": "MIS",
+      "unrealizedPnL": 312,
+      "realizedPnL": 0,
+      "status": "OPEN",
+      "openedAt": "2026-08-27T09:30:00.000Z"
+    },
+    {
+      "id": "pos_1787807799446_92",
+      "userId": "usr_demo_1001",
+      "symbol": "SUZLON",
+      "quantity": 50,
+      "averagePrice": 75.55,
+      "currentPrice": 75.55,
+      "side": "BUY",
+      "productType": "MIS",
+      "unrealizedPnL": 0,
+      "realizedPnL": -2.44,
+      "status": "CLOSED",
+      "openedAt": "2026-08-27T05:16:39.446Z",
+      "closedAt": "2026-08-27T05:16:39.449Z"
+    },
+    {
+      "id": "pos_1787811673888_43",
+      "userId": "usr_demo_1001",
+      "symbol": "SUZLON",
+      "quantity": 50,
+      "averagePrice": 73.44,
+      "currentPrice": 73.44,
+      "side": "BUY",
+      "productType": "MIS",
+      "unrealizedPnL": 0,
+      "realizedPnL": -2.37,
+      "status": "CLOSED",
+      "openedAt": "2026-08-27T06:21:13.888Z",
+      "closedAt": "2026-08-27T06:21:13.892Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-20260827-1001",
+      "userId": "usr_demo_1001",
+      "symbol": "TCS",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "CNC",
+      "quantity": 10,
+      "price": 4120,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 48.2,
+      "isSimulated": true,
+      "createdAt": "2026-08-26T10:15:00.000Z",
+      "executedAt": "2026-08-26T10:15:02.000Z"
+    },
+    {
+      "id": "ORD-20260827-1002",
+      "userId": "usr_demo_1001",
+      "symbol": "INFY",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "CNC",
+      "quantity": 15,
+      "price": 1840,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 32.4,
+      "isSimulated": true,
+      "createdAt": "2026-08-26T11:20:00.000Z",
+      "executedAt": "2026-08-26T11:20:01.000Z"
+    },
+    {
+      "id": "ORD-20260827-1003",
+      "userId": "usr_demo_1001",
+      "symbol": "TATAMOTORS",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "MIS",
+      "quantity": 20,
+      "price": 1030,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Intraday position created",
+      "charges": 18.5,
+      "isSimulated": true,
+      "createdAt": "2026-08-27T09:30:00.000Z",
+      "executedAt": "2026-08-27T09:30:01.000Z"
+    },
+    {
+      "id": "ORD-20260827-4190",
+      "userId": "usr_demo_1001",
+      "symbol": "INFY",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "CNC",
+      "quantity": 2,
+      "price": 1887.34,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 4.5,
+      "chargesBreakdown": {
+        "turnover": 3774.68,
+        "brokerage": 0,
+        "stt": 3.77,
+        "exchangeTurnoverCharges": 0.13,
+        "sebiCharges": 0,
+        "stampDuty": 0.57,
+        "gst": 0.02,
+        "dpCharges": 0,
+        "totalCharges": 4.5
+      },
+      "isSimulated": true,
+      "createdAt": "2026-08-27T05:16:39.427Z",
+      "executedAt": "2026-08-27T05:16:39.427Z"
+    },
+    {
+      "id": "ORD-20260827-5066",
+      "userId": "usr_demo_1001",
+      "symbol": "SUZLON",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "MIS",
+      "quantity": 50,
+      "price": 75.55,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 1.61,
+      "chargesBreakdown": {
+        "turnover": 3777.5,
+        "brokerage": 1.13,
+        "stt": 0,
+        "exchangeTurnoverCharges": 0.13,
+        "sebiCharges": 0,
+        "stampDuty": 0.11,
+        "gst": 0.23,
+        "dpCharges": 0,
+        "totalCharges": 1.61
+      },
+      "isSimulated": true,
+      "createdAt": "2026-08-27T05:16:39.445Z",
+      "executedAt": "2026-08-27T05:16:39.445Z"
+    },
+    {
+      "id": "ORD-20260827-5747",
+      "userId": "usr_demo_1001",
+      "symbol": "RELIANCE",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "CNC",
+      "quantity": 1,
+      "price": 3094.24,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 3.69,
+      "chargesBreakdown": {
+        "turnover": 3094.24,
+        "brokerage": 0,
+        "stt": 3.09,
+        "exchangeTurnoverCharges": 0.11,
+        "sebiCharges": 0,
+        "stampDuty": 0.46,
+        "gst": 0.02,
+        "dpCharges": 0,
+        "totalCharges": 3.69
+      },
+      "isSimulated": true,
+      "createdAt": "2026-08-27T06:12:17.941Z",
+      "executedAt": "2026-08-27T06:12:17.941Z"
+    },
+    {
+      "id": "ORD-20260827-5267",
+      "userId": "usr_demo_1001",
+      "symbol": "INFY",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "CNC",
+      "quantity": 2,
+      "price": 1966.68,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 4.69,
+      "chargesBreakdown": {
+        "turnover": 3933.36,
+        "brokerage": 0,
+        "stt": 3.93,
+        "exchangeTurnoverCharges": 0.14,
+        "sebiCharges": 0,
+        "stampDuty": 0.59,
+        "gst": 0.03,
+        "dpCharges": 0,
+        "totalCharges": 4.69
+      },
+      "isSimulated": true,
+      "createdAt": "2026-08-27T06:21:13.882Z",
+      "executedAt": "2026-08-27T06:21:13.882Z"
+    },
+    {
+      "id": "ORD-20260827-7246",
+      "userId": "usr_demo_1001",
+      "symbol": "SUZLON",
+      "exchange": "NSE",
+      "side": "BUY",
+      "orderType": "MARKET",
+      "productType": "MIS",
+      "quantity": 50,
+      "price": 73.44,
+      "triggerPrice": 0,
+      "status": "FILLED",
+      "statusMessage": "Order executed successfully at market price",
+      "charges": 1.56,
+      "chargesBreakdown": {
+        "turnover": 3672,
+        "brokerage": 1.1,
+        "stt": 0,
+        "exchangeTurnoverCharges": 0.13,
+        "sebiCharges": 0,
+        "stampDuty": 0.11,
+        "gst": 0.22,
+        "dpCharges": 0,
+        "totalCharges": 1.56
+      },
+      "isSimulated": true,
+      "createdAt": "2026-08-27T06:21:13.887Z",
+      "executedAt": "2026-08-27T06:21:13.887Z"
+    }
+  ],
+  "fundTransactions": [
+    {
+      "id": "TXN-20260825-001",
+      "userId": "usr_demo_1001",
+      "type": "DEPOSIT",
+      "amount": 500000,
+      "status": "SUCCESS",
+      "paymentMethod": "UPI (Simulated)",
+      "referenceId": "UPI/SIM/8927192847",
+      "description": "Initial Demo Trading Capital",
+      "createdAt": "2026-08-25T09:00:00.000Z"
+    },
+    {
+      "id": "TXN-20260826-002",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 41248.2,
+      "status": "SUCCESS",
+      "paymentMethod": "Trading Balance",
+      "referenceId": "ORD-20260827-1001",
+      "description": "Bought 10 TCS @ ₹4,120.00 (CNC) + Charges",
+      "createdAt": "2026-08-26T10:15:02.000Z"
+    },
+    {
+      "id": "TXN-20260826-003",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 27632.4,
+      "status": "SUCCESS",
+      "paymentMethod": "Trading Balance",
+      "referenceId": "ORD-20260827-1002",
+      "description": "Bought 15 INFY @ ₹1,840.00 (CNC) + Charges",
+      "createdAt": "2026-08-26T11:20:01.000Z"
+    },
+    {
+      "id": "TXN-20260827-1239",
+      "userId": "usr_demo_1001",
+      "type": "MUTUAL_FUND_SIP",
+      "amount": 2000,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "sip_1787807737319",
+      "description": "SIP Installment #1 for Parag Parikh Flexi Cap Fund",
+      "createdAt": "2026-08-27T05:15:37.319Z"
+    },
+    {
+      "id": "TXN-20260827-4784",
+      "userId": "usr_demo_1001",
+      "type": "IPO_APPLICATION",
+      "amount": 14820,
+      "status": "SUCCESS",
+      "paymentMethod": "UPI Mandate (test@okaxis)",
+      "referenceId": "ipo_app_1787807737360",
+      "description": "Applied for 1 lot(s) (38 shares) in Swiggy Limited IPO",
+      "createdAt": "2026-08-27T05:15:37.360Z"
+    },
+    {
+      "id": "TXN-20260827-3995",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 3779.18,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "ORD-20260827-4190",
+      "description": "Bought 2 INFY @ ₹1,887.34 (CNC) + Charges ₹4.5",
+      "createdAt": "2026-08-27T05:16:39.439Z"
+    },
+    {
+      "id": "TXN-20260827-5989",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 3779.11,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "ORD-20260827-5066",
+      "description": "Bought 50 SUZLON @ ₹75.55 (MIS) + Charges ₹1.61",
+      "createdAt": "2026-08-27T05:16:39.446Z"
+    },
+    {
+      "id": "TXN-20260827-7506",
+      "userId": "usr_demo_1001",
+      "type": "MUTUAL_FUND_SIP",
+      "amount": 2000,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "sip_1787807799452",
+      "description": "SIP Installment #1 for Parag Parikh Flexi Cap Fund",
+      "createdAt": "2026-08-27T05:16:39.452Z"
+    },
+    {
+      "id": "TXN-20260827-4149",
+      "userId": "usr_demo_1001",
+      "type": "IPO_APPLICATION",
+      "amount": 14820,
+      "status": "SUCCESS",
+      "paymentMethod": "UPI Mandate (test@okaxis)",
+      "referenceId": "ipo_app_1787807799454",
+      "description": "Applied for 1 lot(s) (38 shares) in Swiggy Limited IPO",
+      "createdAt": "2026-08-27T05:16:39.454Z"
+    },
+    {
+      "id": "TXN-20260827-4654",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 3097.93,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "ORD-20260827-5747",
+      "description": "Bought 1 RELIANCE @ ₹3,094.24 (CNC) + Charges ₹3.69",
+      "createdAt": "2026-08-27T06:12:17.952Z"
+    },
+    {
+      "id": "TXN-20260827-5701",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 3938.05,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "ORD-20260827-5267",
+      "description": "Bought 2 INFY @ ₹1,966.68 (CNC) + Charges ₹4.69",
+      "createdAt": "2026-08-27T06:21:13.884Z"
+    },
+    {
+      "id": "TXN-20260827-4924",
+      "userId": "usr_demo_1001",
+      "type": "BUY_TRADE",
+      "amount": 3673.56,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "ORD-20260827-7246",
+      "description": "Bought 50 SUZLON @ ₹73.44 (MIS) + Charges ₹1.56",
+      "createdAt": "2026-08-27T06:21:13.889Z"
+    },
+    {
+      "id": "TXN-20260827-1577",
+      "userId": "usr_demo_1001",
+      "type": "MUTUAL_FUND_SIP",
+      "amount": 2000,
+      "status": "SUCCESS",
+      "paymentMethod": "Simulated Trading Balance",
+      "referenceId": "sip_1787811673896",
+      "description": "SIP Installment #1 for Parag Parikh Flexi Cap Fund",
+      "createdAt": "2026-08-27T06:21:13.897Z"
+    },
+    {
+      "id": "TXN-20260827-8539",
+      "userId": "usr_demo_1001",
+      "type": "IPO_APPLICATION",
+      "amount": 14820,
+      "status": "SUCCESS",
+      "paymentMethod": "UPI Mandate (test@okaxis)",
+      "referenceId": "ipo_app_1787811673909",
+      "description": "Applied for 1 lot(s) (38 shares) in Swiggy Limited IPO",
+      "createdAt": "2026-08-27T06:21:13.912Z"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alt_1001",
+      "userId": "usr_demo_1001",
+      "symbol": "RELIANCE",
+      "condition": "PRICE_ABOVE",
+      "targetValue": 3000,
+      "status": "ACTIVE",
+      "createdAt": "2026-08-26T12:00:00.000Z"
+    },
+    {
+      "id": "alt_1002",
+      "userId": "usr_demo_1001",
+      "symbol": "SUZLON",
+      "condition": "PERCENT_MOVE",
+      "targetValue": 5,
+      "status": "ACTIVE",
+      "createdAt": "2026-08-26T14:00:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_101",
+      "userId": "usr_demo_1001",
+      "title": "Welcome to NexTrade Pro",
+      "message": "Your paper trading account has been credited with ₹5,00,000 simulated funds. Happy investing!",
+      "type": "SYSTEM",
+      "isRead": true,
+      "createdAt": "2026-08-25T09:00:00.000Z"
+    },
+    {
+      "id": "notif_102",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed",
+      "message": "Executed 10 TCS at ₹4,120.00 (Delivery CNC).",
+      "type": "ORDER",
+      "isRead": true,
+      "createdAt": "2026-08-26T10:15:02.000Z"
+    },
+    {
+      "id": "notif_103",
+      "userId": "usr_demo_1001",
+      "title": "Market Movers Alert",
+      "message": "NIFTY IT Index surged +1.41% led by TCS and Infosys rally.",
+      "type": "MARKET",
+      "isRead": false,
+      "createdAt": "2026-08-27T09:15:00.000Z"
+    },
+    {
+      "id": "notif_1787807737319",
+      "userId": "usr_demo_1001",
+      "title": "SIP Started Successfully",
+      "message": "Your monthly SIP of ₹2,000 in Parag Parikh Flexi Cap Fund is now active.",
+      "type": "SIP",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:15:37.357Z"
+    },
+    {
+      "id": "notif_1787807737361",
+      "userId": "usr_demo_1001",
+      "title": "IPO Application Submitted",
+      "message": "Application for Swiggy Limited (1 lot) has been placed. Amount blocked: ₹14,820.",
+      "type": "IPO",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:15:37.361Z"
+    },
+    {
+      "id": "notif_1787807799440",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed: BUY INFY",
+      "message": "Executed 2 INFY @ ₹1,887.34 (CNC). Total value: ₹3,774.68.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:16:39.440Z"
+    },
+    {
+      "id": "notif_1787807799447",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed: BUY SUZLON",
+      "message": "Executed 50 SUZLON @ ₹75.55 (MIS). Total value: ₹3,777.5.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:16:39.447Z"
+    },
+    {
+      "id": "notif_1787807799450",
+      "userId": "usr_demo_1001",
+      "title": "Position Squared Off: SUZLON",
+      "message": "Squared off 50 SUZLON @ ₹75.55. Realized P&L: ₹-2.44.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:16:39.450Z"
+    },
+    {
+      "id": "notif_1787807799452",
+      "userId": "usr_demo_1001",
+      "title": "SIP Started Successfully",
+      "message": "Your monthly SIP of ₹2,000 in Parag Parikh Flexi Cap Fund is now active.",
+      "type": "SIP",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:16:39.452Z"
+    },
+    {
+      "id": "notif_1787807799455",
+      "userId": "usr_demo_1001",
+      "title": "IPO Application Submitted",
+      "message": "Application for Swiggy Limited (1 lot) has been placed. Amount blocked: ₹14,820.",
+      "type": "IPO",
+      "isRead": false,
+      "createdAt": "2026-08-27T05:16:39.455Z"
+    },
+    {
+      "id": "notif_1787811137956",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed: BUY RELIANCE",
+      "message": "Executed 1 RELIANCE @ ₹3,094.24 (CNC). Total value: ₹3,094.24.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:12:17.956Z"
+    },
+    {
+      "id": "notif_1787811673885",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed: BUY INFY",
+      "message": "Executed 2 INFY @ ₹1,966.68 (CNC). Total value: ₹3,933.36.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:21:13.885Z"
+    },
+    {
+      "id": "notif_1787811673890",
+      "userId": "usr_demo_1001",
+      "title": "Order Executed: BUY SUZLON",
+      "message": "Executed 50 SUZLON @ ₹73.44 (MIS). Total value: ₹3,672.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:21:13.890Z"
+    },
+    {
+      "id": "notif_1787811673894",
+      "userId": "usr_demo_1001",
+      "title": "Position Squared Off: SUZLON",
+      "message": "Squared off 50 SUZLON @ ₹73.44. Realized P&L: ₹-2.37.",
+      "type": "ORDER",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:21:13.894Z"
+    },
+    {
+      "id": "notif_1787811673897",
+      "userId": "usr_demo_1001",
+      "title": "SIP Started Successfully",
+      "message": "Your monthly SIP of ₹2,000 in Parag Parikh Flexi Cap Fund is now active.",
+      "type": "SIP",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:21:13.897Z"
+    },
+    {
+      "id": "notif_1787811673913",
+      "userId": "usr_demo_1001",
+      "title": "IPO Application Submitted",
+      "message": "Application for Swiggy Limited (1 lot) has been placed. Amount blocked: ₹14,820.",
+      "type": "IPO",
+      "isRead": false,
+      "createdAt": "2026-08-27T06:21:13.913Z"
+    }
+  ],
+  "news": [
+    {
+      "id": "news_101",
+      "title": "Indian Benchmark Indices Nifty and Sensex Touch Record Highs on Foreign Inflows",
+      "summary": "Robust earnings in large-cap IT and banking companies drive sustained rally across NSE and BSE indices.",
+      "source": "NexTrade Market Wire",
+      "category": "Market",
+      "timestamp": "2026-08-27T09:00:00.000Z",
+      "relatedSymbols": [
+        "NIFTY 50",
+        "SENSEX",
+        "TCS",
+        "INFY"
+      ]
+    },
+    {
+      "id": "news_102",
+      "title": "Tata Motors Announces Expansion in Commercial EV Segment",
+      "summary": "Tata Motors green-lights ₹4,000 crore capital expenditure for next-generation electric freight vehicles.",
+      "source": "Auto Sector Insights",
+      "category": "Corporate",
+      "timestamp": "2026-08-27T08:30:00.000Z",
+      "relatedSymbols": [
+        "TATAMOTORS"
+      ]
+    },
+    {
+      "id": "news_103",
+      "title": "Renewable Energy Momentum: Suzlon Bags 400 MW Wind Energy Order",
+      "summary": "Suzlon Energy secures massive domestic EPC contract from leading power utility in Gujarat.",
+      "source": "Renewable Energy Today",
+      "category": "Corporate",
+      "timestamp": "2026-08-26T16:45:00.000Z",
+      "relatedSymbols": [
+        "SUZLON"
+      ]
+    }
+  ],
+  "supportTickets": [
+    {
+      "id": "TCK-1001",
+      "userId": "usr_demo_1001",
+      "subject": "Understanding Simulated Charges",
+      "category": "Trading & Charges",
+      "description": "How are STT and exchange turnover fees calculated on intraday vs delivery trades?",
+      "status": "Resolved",
+      "response": "Delivery trades incur 0.1% STT on both buy/sell sides with 0% brokerage. Intraday trades incur 0.03% (max ₹20) brokerage and 0.025% STT on sell side only.",
+      "createdAt": "2026-08-26T14:00:00.000Z",
+      "resolvedAt": "2026-08-26T15:30:00.000Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud_101",
+      "userId": "usr_demo_1001",
+      "action": "USER_LOGIN",
+      "details": "Demo user logged in via Web Client",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T09:00:00.000Z"
+    },
+    {
+      "id": "aud_1787807737305_s96e",
+      "userId": "usr_demo_1001",
+      "action": "DEMO_LOGIN",
+      "details": "User logged in via 1-click Demo Account",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:15:37.305Z"
+    },
+    {
+      "id": "aud_1787807737357_jve4",
+      "userId": "usr_demo_1001",
+      "action": "SIP_CREATED",
+      "details": "{\"sipId\":\"sip_1787807737319\",\"fundName\":\"Parag Parikh Flexi Cap Fund\",\"amount\":2000}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:15:37.357Z"
+    },
+    {
+      "id": "aud_1787807737361_buxd",
+      "userId": "usr_demo_1001",
+      "action": "IPO_APPLIED",
+      "details": "{\"appId\":\"ipo_app_1787807737360\",\"ipo\":\"Swiggy Limited\",\"lots\":1,\"amountBlocked\":14820}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:15:37.361Z"
+    },
+    {
+      "id": "aud_1787807799417_y4ti",
+      "userId": "usr_demo_1001",
+      "action": "DEMO_LOGIN",
+      "details": "User logged in via 1-click Demo Account",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:16:39.417Z"
+    },
+    {
+      "id": "aud_1787807799440_8ya5",
+      "userId": "usr_demo_1001",
+      "action": "ORDER_EXECUTED",
+      "details": "{\"orderId\":\"ORD-20260827-4190\",\"symbol\":\"INFY\",\"side\":\"BUY\",\"qty\":2,\"price\":1887.34,\"productType\":\"CNC\"}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:16:39.440Z"
+    },
+    {
+      "id": "aud_1787807799447_hb9s",
+      "userId": "usr_demo_1001",
+      "action": "ORDER_EXECUTED",
+      "details": "{\"orderId\":\"ORD-20260827-5066\",\"symbol\":\"SUZLON\",\"side\":\"BUY\",\"qty\":50,\"price\":75.55,\"productType\":\"MIS\"}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:16:39.447Z"
+    },
+    {
+      "id": "aud_1787807799453_t3p4",
+      "userId": "usr_demo_1001",
+      "action": "SIP_CREATED",
+      "details": "{\"sipId\":\"sip_1787807799452\",\"fundName\":\"Parag Parikh Flexi Cap Fund\",\"amount\":2000}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:16:39.453Z"
+    },
+    {
+      "id": "aud_1787807799455_lus2",
+      "userId": "usr_demo_1001",
+      "action": "IPO_APPLIED",
+      "details": "{\"appId\":\"ipo_app_1787807799454\",\"ipo\":\"Swiggy Limited\",\"lots\":1,\"amountBlocked\":14820}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:16:39.455Z"
+    },
+    {
+      "id": "aud_1787807851958_jg3f",
+      "userId": "usr_demo_1001",
+      "action": "DEMO_LOGIN",
+      "details": "User logged in via 1-click Demo Account",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T05:17:31.958Z"
+    },
+    {
+      "id": "aud_1787811137957_nzrg",
+      "userId": "usr_demo_1001",
+      "action": "ORDER_EXECUTED",
+      "details": "{\"orderId\":\"ORD-20260827-5747\",\"symbol\":\"RELIANCE\",\"side\":\"BUY\",\"qty\":1,\"price\":3094.24,\"productType\":\"CNC\"}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:12:17.957Z"
+    },
+    {
+      "id": "aud_1787811673874_lknc",
+      "userId": "usr_demo_1001",
+      "action": "DEMO_LOGIN",
+      "details": "User logged in via 1-click Demo Account",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:21:13.874Z"
+    },
+    {
+      "id": "aud_1787811673885_26no",
+      "userId": "usr_demo_1001",
+      "action": "ORDER_EXECUTED",
+      "details": "{\"orderId\":\"ORD-20260827-5267\",\"symbol\":\"INFY\",\"side\":\"BUY\",\"qty\":2,\"price\":1966.68,\"productType\":\"CNC\"}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:21:13.885Z"
+    },
+    {
+      "id": "aud_1787811673891_1s8f",
+      "userId": "usr_demo_1001",
+      "action": "ORDER_EXECUTED",
+      "details": "{\"orderId\":\"ORD-20260827-7246\",\"symbol\":\"SUZLON\",\"side\":\"BUY\",\"qty\":50,\"price\":73.44,\"productType\":\"MIS\"}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:21:13.891Z"
+    },
+    {
+      "id": "aud_1787811673898_xt54",
+      "userId": "usr_demo_1001",
+      "action": "SIP_CREATED",
+      "details": "{\"sipId\":\"sip_1787811673896\",\"fundName\":\"Parag Parikh Flexi Cap Fund\",\"amount\":2000}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:21:13.898Z"
+    },
+    {
+      "id": "aud_1787811673913_x8tt",
+      "userId": "usr_demo_1001",
+      "action": "IPO_APPLIED",
+      "details": "{\"appId\":\"ipo_app_1787811673909\",\"ipo\":\"Swiggy Limited\",\"lots\":1,\"amountBlocked\":14820}",
+      "ipAddress": "127.0.0.1",
+      "status": "SUCCESS",
+      "timestamp": "2026-08-27T06:21:13.913Z"
+    }
+  ]
+}

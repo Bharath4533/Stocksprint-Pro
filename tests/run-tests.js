@@ -1,1 +1,37 @@
-const {spawn}=require('child_process');const s=spawn(process.execPath,['backend/server.js'],{stdio:'inherit'});setTimeout(()=>{const t=spawn(process.execPath,['tests/test.js'],{stdio:'inherit'});t.on('close',c=>{s.kill();process.exit(c)})},1200)
+// Master Test Runner for NexTrade Pro
+
+const { spawn } = require('child_process');
+const path = require('path');
+
+console.log('🚀 Starting NexTrade Pro Test Suite...');
+
+// 1. Run Unit Tests synchronously
+const unit = spawn(process.execPath, [path.join(__dirname, 'unit.test.js')], { stdio: 'inherit' });
+
+unit.on('close', (unitCode) => {
+  if (unitCode !== 0) {
+    console.error('Unit tests failed with exit code', unitCode);
+    process.exit(unitCode);
+  }
+
+  // 2. Start Backend Server for Integration Tests
+  const server = spawn(process.execPath, [path.join(__dirname, '../backend/server.js')], {
+    stdio: 'pipe',
+    env: { ...process.env, PORT: 3000 }
+  });
+
+  setTimeout(() => {
+    // 3. Run Integration Tests
+    const integration = spawn(process.execPath, [path.join(__dirname, 'integration.test.js')], { stdio: 'inherit' });
+
+    integration.on('close', (intCode) => {
+      server.kill();
+      if (intCode === 0) {
+        console.log('🎉 ALL TESTS PASSED SUCCESSFULLY! (100% PASS RATE)');
+      } else {
+        console.error('Integration tests failed with exit code', intCode);
+      }
+      process.exit(intCode);
+    });
+  }, 1000);
+});

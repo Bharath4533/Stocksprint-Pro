@@ -1,12 +1,189 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StockSprint Pro</title><link rel="stylesheet" href="styles.css"></head><body>
-<header><div class="brand"><img src="/assets/icon.svg">StockSprint <b>Pro</b></div><input id="search" placeholder="Search stocks..." oninput="searchStocks()"><button onclick="show('notifications')">🔔</button><button onclick="show('settings')">⚙</button></header>
-<div class="layout"><aside><button onclick="show('home')">🏠 Home</button><button onclick="show('wishlist')">♡ Wishlist</button><button onclick="show('portfolio')">▣ Portfolio</button><button onclick="show('orders')">↕ Orders</button><button onclick="show('account')">◉ Account</button><button onclick="show('settings')">⚙ Settings</button></aside>
-<main>
-<section id="home"><div class="hero"><div><small>LEARN • PRACTICE • INVEST SMARTER</small><h1>Build confidence before you trade.</h1><p>Explore stocks, create wishlists and practice virtual trading.</p></div><div class="balance">Virtual Trading Balance<strong id="balance"></strong></div></div><div class="chips"><button onclick="filter('gainers')">Gainers</button><button onclick="filter('losers')">Losers</button><button onclick="filter('software')">Software</button><button onclick="filter('affordable')">Affordable</button></div><h2>Stocks you're interested in</h2><div id="interest" class="grid"></div><h2>Top Movers</h2><div id="movers" class="grid"></div><h2>Discover Stocks</h2><div id="discover" class="grid"></div><div class="columns"><div class="panel"><h3>Most Bought</h3><div id="bought"></div></div><div class="panel"><h3>Most Active by Volume</h3><div id="volume"></div></div><div class="panel"><h3>Most Active by Value</h3><div id="value"></div></div></div></section>
-<section id="wishlist" class="hidden"><div class="title"><h1>Wishlist</h1><button class="primary" onclick="newFolder()">＋ Create New Folder</button></div><div id="wishlistContent"></div></section>
-<section id="portfolio" class="hidden"><h1>Portfolio</h1><div class="metrics"><div>Equity<strong id="equity"></strong></div><div>Mutual Funds<strong id="mf"></strong></div><div>MTF Borrowing<strong id="mtf"></strong></div><div>Net Value<strong id="net"></strong></div></div><div class="panel"><h2>Investment Picks</h2><div id="picks"></div></div></section>
-<section id="orders" class="hidden"><h1>Orders</h1><div class="panel"><h2>Today's Order History</h2><div id="ordersList"></div></div><div class="panel"><h2>Trading Ideas</h2><p>📈 Compare price movement with volume before a paper trade.</p><p>🧠 Use virtual orders to learn risk management.</p></div></section>
-<section id="account" class="hidden"><h1>Account</h1><div class="account"><button>Withdraw</button><button>Add Funds</button><button>Profile</button><button>Refer & Earn</button><button>Manage Segments</button><button>Get Help</button></div><div class="panel"><h2>Trading Balance</h2><strong id="accountBalance"></strong></div><div class="panel"><h2>Reports & Statements</h2><div class="account"><button>Statements</button><button>Trades & Charges</button><button>Order History</button><button>Profit & Loss</button><button>Fund Transaction</button><button onclick="downloadReport()">Download Report</button></div></div></section>
-<section id="settings" class="hidden"><h1>Settings</h1><div class="panel"><label>Dark mode <input type="checkbox" onclick="document.body.classList.toggle('dark')"></label><hr><label>Price alerts <input type="checkbox" checked></label><hr><label>Order notifications <input type="checkbox" checked></label></div></section>
-<section id="notifications" class="hidden"><h1>Notifications</h1><div class="panel" id="notes"></div></section>
-</main></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NexTrade Pro | Complete Indian Stock Trading & Investment Platform</title>
+  <meta name="description" content="Next-generation paper trading & investment platform for Indian markets with real-time NSE/BSE equities, mutual funds, SIPs, IPOs, and interactive candlestick charts.">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+</head>
+<body class="dark">
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <a href="#/dashboard" class="brand-wrapper">
+      <div class="brand-logo">N</div>
+      <div class="brand-name">Nex<span>Trade</span> <small style="font-size: 11px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); padding: 2px 6px; border-radius: 4px; color: var(--brand-primary); font-weight: 700;">PRO</small></div>
+    </a>
+
+    <!-- Global Search Input -->
+    <div class="search-container" onclick="SearchModal.open()">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search stocks, mutual funds, IPOs, indices..." readonly>
+      <kbd class="search-kbd">⌘K</kbd>
+    </div>
+
+    <!-- Header Right Status & Profile -->
+    <div class="header-right">
+      <div class="simulated-pill">
+        <div class="simulated-pill-dot"></div>
+        <span>PAPER TRADING</span>
+      </div>
+
+      <button class="icon-btn" title="Price Alerts" onclick="window.location.hash='#/alerts'">
+        🔔
+      </button>
+
+      <button class="icon-btn" style="position: relative;" title="Notification Center" onclick="NotificationsDrawer.open()">
+        ✉️
+        <span id="header-notif-badge" style="display:none; position:absolute; top:-4px; right:-4px; background:var(--loss-red); color:#fff; font-size:10px; font-weight:800; border-radius:50%; width:16px; height:16px; align-items:center; justify-content:center;">0</span>
+      </button>
+
+      <button class="icon-btn" title="Toggle Theme" onclick="ProfileView.toggleTheme()">
+        🌓
+      </button>
+
+      <button class="icon-btn" title="Profile & KYC" onclick="window.location.hash='#/profile'">
+        👤
+      </button>
+    </div>
+  </header>
+
+  <!-- Benchmark Indices Live Ticker Ribbon -->
+  <div class="ticker-bar" id="header-ticker-bar">
+    <div class="ticker-item"><span class="ticker-symbol">NIFTY 50:</span> <span class="ticker-val">24,825.40</span> <span class="gain">+0.58%</span></div>
+    <div class="ticker-item"><span class="ticker-symbol">SENSEX:</span> <span class="ticker-val">81,550.25</span> <span class="gain">+0.57%</span></div>
+    <div class="ticker-item"><span class="ticker-symbol">BANK NIFTY:</span> <span class="ticker-val">51,240.80</span> <span class="loss">-0.17%</span></div>
+    <div class="ticker-item"><span class="ticker-symbol">NIFTY IT:</span> <span class="ticker-val">41,820.60</span> <span class="gain">+1.41%</span></div>
+  </div>
+
+  <!-- App Layout with Sidebar & Main View -->
+  <div class="app-layout">
+    <!-- Desktop Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <a href="#/dashboard" class="nav-item active">
+        <span class="nav-item-icon">🏠</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="#/markets" class="nav-item">
+        <span class="nav-item-icon">📊</span>
+        <span>Markets & Discover</span>
+      </a>
+      <a href="#/watchlist" class="nav-item">
+        <span class="nav-item-icon">♡</span>
+        <span>Watchlists</span>
+      </a>
+      <a href="#/portfolio" class="nav-item">
+        <span class="nav-item-icon">💼</span>
+        <span>Portfolio & Holdings</span>
+      </a>
+      <a href="#/orders" class="nav-item">
+        <span class="nav-item-icon">↕️</span>
+        <span>Order Book</span>
+      </a>
+      <a href="#/funds" class="nav-item">
+        <span class="nav-item-icon">💵</span>
+        <span>Funds & Ledger</span>
+      </a>
+
+      <div class="sidebar-divider"></div>
+
+      <a href="#/mutual-funds" class="nav-item">
+        <span class="nav-item-icon">🌱</span>
+        <span>Mutual Funds & SIP</span>
+      </a>
+      <a href="#/ipos" class="nav-item">
+        <span class="nav-item-icon">🏷️</span>
+        <span>IPO Hub</span>
+      </a>
+      <a href="#/alerts" class="nav-item">
+        <span class="nav-item-icon">🔔</span>
+        <span>Price Alerts</span>
+      </a>
+      <a href="#/onboarding" class="nav-item">
+        <span class="nav-item-icon">📋</span>
+        <span>KYC Onboarding</span>
+      </a>
+
+      <div class="sidebar-divider"></div>
+
+      <a href="#/support" class="nav-item">
+        <span class="nav-item-icon">💡</span>
+        <span>Help & FAQs</span>
+      </a>
+      <a href="#/legal" class="nav-item">
+        <span class="nav-item-icon">⚖️</span>
+        <span>Regulatory & Fees</span>
+      </a>
+      <a href="#/admin" class="nav-item">
+        <span class="nav-item-icon">🛡️</span>
+        <span>Admin Panel</span>
+      </a>
+    </aside>
+
+    <!-- Main Content Container -->
+    <main class="app-main">
+      <div id="app-view-container">
+        <!-- Views rendered here by App Router -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="#/dashboard" class="mobile-nav-item active">
+      <span class="mobile-nav-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#/markets" class="mobile-nav-item">
+      <span class="mobile-nav-icon">📊</span>
+      <span>Discover</span>
+    </a>
+    <a href="#/watchlist" class="mobile-nav-item">
+      <span class="mobile-nav-icon">♡</span>
+      <span>Watchlist</span>
+    </a>
+    <a href="#/portfolio" class="mobile-nav-item">
+      <span class="mobile-nav-icon">💼</span>
+      <span>Portfolio</span>
+    </a>
+    <a href="#/orders" class="mobile-nav-item">
+      <span class="mobile-nav-icon">↕️</span>
+      <span>Orders</span>
+    </a>
+    <a href="#/profile" class="mobile-nav-item">
+      <span class="mobile-nav-icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Load Frontend JavaScript Application Modules -->
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/components/toast.js"></script>
+  <script src="/js/components/modal.js"></script>
+  <script src="/js/components/chart.js"></script>
+  <script src="/js/components/orderModal.js"></script>
+  <script src="/js/components/search.js"></script>
+  
+  <script src="/js/views/dashboard.js"></script>
+  <script src="/js/views/markets.js"></script>
+  <script src="/js/views/stockDetail.js"></script>
+  <script src="/js/views/watchlist.js"></script>
+  <script src="/js/views/portfolio.js"></script>
+  <script src="/js/views/orders.js"></script>
+  <script src="/js/views/funds.js"></script>
+  <script src="/js/views/mutualFunds.js"></script>
+  <script src="/js/views/ipo.js"></script>
+  <script src="/js/views/alerts.js"></script>
+  <script src="/js/views/notifications.js"></script>
+  <script src="/js/views/onboarding.js"></script>
+  <script src="/js/views/profile.js"></script>
+  <script src="/js/views/support.js"></script>
+  <script src="/js/views/legal.js"></script>
+  <script src="/js/views/admin.js"></script>
+  
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
   "user": {
     "name": "Bharath",
     "email": "bharath@example.com",
-    "tradingBalance": 125000,
+    "tradingBalance": 119186.3,
     "cash": 85000
   },
   "stocks": [
@@ -110,7 +110,8 @@
   "wishlist": {
     "My Wishlist": [
       "TCS",
-      "INFY"
+      "INFY",
+      "SUZLON"
     ],
     "Software Picks": [
       "HCLTECH"
@@ -127,6 +128,24 @@
     ]
   },
   "orders": [
+    {
+      "id": "ORD1004",
+      "symbol": "HCLTECH",
+      "side": "BUY",
+      "qty": 1,
+      "price": 1688.4,
+      "status": "Completed",
+      "date": "2026-08-26"
+    },
+    {
+      "id": "ORD1003",
+      "symbol": "TCS",
+      "side": "BUY",
+      "qty": 1,
+      "price": 4125.3,
+      "status": "Completed",
+      "date": "2026-08-26"
+    },
     {
       "id": "ORD1001",
       "symbol": "TCS",

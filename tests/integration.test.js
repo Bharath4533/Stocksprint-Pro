@@ -101,6 +101,24 @@ async function runIntegrationTests() {
     assert(nifty.value > 20000);
   });
 
+  await test('GET /api/markets/indices/NIFTY%2050 returns 1-Month performance stats & constituents', async () => {
+    const res = await request('/api/markets/indices/NIFTY%2050');
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.symbol, 'NIFTY 50');
+    assert(res.data.monthHigh > 0);
+    assert(res.data.monthLow > 0);
+    assert(Array.isArray(res.data.constituents));
+    assert(res.data.constituents.length > 0);
+  });
+
+  await test('GET /api/markets/indices/NIFTY%2050/chart?range=1M returns 1-Month historical candles', async () => {
+    const res = await request('/api/markets/indices/NIFTY%2050/chart?range=1M');
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.range, '1M');
+    assert(Array.isArray(res.data.candles));
+    assert(res.data.candles.length > 0);
+  });
+
   await test('GET /api/stocks/RELIANCE returns quote, fundamentals, and financials', async () => {
     const res = await request('/api/stocks/RELIANCE');
     assert.strictEqual(res.status, 200);

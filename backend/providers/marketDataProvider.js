@@ -228,10 +228,17 @@ class MarketDataProvider {
     return db.find('securities', s => s.sector && s.sector.toLowerCase() === sector.toLowerCase());
   }
 
-  // Generate historical OHLCV candles
+  // Generate historical OHLCV candles (works for both Stocks and Benchmark Indices)
   getHistoricalCandles(symbol, range = '1D') {
+    let basePrice = 1000.0;
     const sec = this.getQuote(symbol);
-    const basePrice = sec ? sec.price : 1000.0;
+    if (sec) {
+      basePrice = sec.price;
+    } else {
+      const idx = this.getIndex(symbol);
+      if (idx) basePrice = idx.value;
+    }
+
     const candles = [];
     const now = new Date();
 
@@ -241,23 +248,23 @@ class MarketDataProvider {
     switch (range.toUpperCase()) {
       case '1D': count = 75; intervalMinutes = 5; break;
       case '1W': count = 35; intervalMinutes = 60; break;
-      case '1M': count = 30; intervalMinutes = 1440; break;
+      case '1M': count = 30; intervalMinutes = 1440; break; // 30 daily candles for 1 Month
       case '3M': count = 60; intervalMinutes = 1440; break;
       case '1Y': count = 52; intervalMinutes = 10080; break;
       case '5Y': count = 60; intervalMinutes = 43200; break;
       default: count = 75; intervalMinutes = 5;
     }
 
-    let runningPrice = basePrice * (1 - (count * 0.0015));
+    let runningPrice = basePrice * (1 - (count * 0.0012));
 
     for (let i = count; i >= 0; i--) {
       const candleTime = new Date(now.getTime() - (i * intervalMinutes * 60 * 1000));
-      const drift = (Math.random() - 0.49) * 0.012;
+      const drift = (Math.random() - 0.485) * (range === '1M' ? 0.015 : 0.008);
       const open = Math.round(runningPrice * 100) / 100;
       const close = Math.round((open * (1 + drift)) * 100) / 100;
-      const high = Math.round((Math.max(open, close) * (1 + Math.random() * 0.006)) * 100) / 100;
-      const low = Math.round((Math.min(open, close) * (1 - Math.random() * 0.006)) * 100) / 100;
-      const volume = Math.floor(Math.random() * 15000) + 1200;
+      const high = Math.round((Math.max(open, close) * (1 + Math.random() * 0.005)) * 100) / 100;
+      const low = Math.round((Math.min(open, close) * (1 - Math.random() * 0.005)) * 100) / 100;
+      const volume = Math.floor(Math.random() * 450000) + 50000;
 
       candles.push({
         time: candleTime.toISOString(),
@@ -272,6 +279,69 @@ class MarketDataProvider {
     }
 
     return candles;
+  }
+
+  getIndex(symbol) {
+    if (!symbol) return null;
+    const s = symbol.toLowerCase().trim();
+    return db.findOne('indices', i => i.symbol.toLowerCase() === s || i.name.toLowerCase() === s || i.symbol.toLowerCase().replace(/\s+/g, '') === s.replace(/\s+/g, ''));
+  }
+
+  getIndexDetails(symbol) {
+    const idx = this.getIndex(symbol) || db.getCollection('indices')[0];
+    const val = idx ? idx.value : 24825.40;
+    const monthGainPts = Math.round(val * 0.034 * 100) / 100;
+    const monthReturnPct = 3.42;
+
+    const constituentsMap = {
+      'NIFTY 50': [
+        { name: 'HDFC Bank', symbol: 'HDFCBANK', weight: '11.4%', price: 1680.50, change: '+0.85%' },
+        { name: 'Reliance Industries', symbol: 'RELIANCE', weight: '9.8%', price: 3012.40, change: '+1.15%' },
+        { name: 'ICICI Bank', symbol: 'ICICIBANK', weight: '7.6%', price: 1220.10, change: '+0.42%' },
+        { name: 'Infosys', symbol: 'INFY', weight: '6.1%', price: 1845.60, change: '+1.65%' },
+        { name: 'Tata Consultancy Services', symbol: 'TCS', weight: '4.8%', price: 4230.15, change: '+1.22%' },
+        { name: 'ITC Ltd', symbol: 'ITC', weight: '4.1%', price: 488.30, change: '-0.15%' },
+        { name: 'Larsen & Toubro', symbol: 'LT', weight: '3.9%', price: 3620.00, change: '+0.78%' },
+      ],
+      'SENSEX': [
+        { name: 'Reliance Industries', symbol: 'RELIANCE', weight: '11.8%', price: 3012.40, change: '+1.15%' },
+        { name: 'HDFC Bank', symbol: 'HDFCBANK', weight: '10.9%', price: 1680.50, change: '+0.85%' },
+        { name: 'ICICI Bank', symbol: 'ICICIBANK', weight: '8.4%', price: 1220.10, change: '+0.42%' },
+        { name: 'Infosys', symbol: 'INFY', weight: '7.2%', price: 1845.60, change: '+1.65%' },
+        { name: 'TCS', symbol: 'TCS', weight: '5.6%', price: 4230.15, change: '+1.22%' },
+      ],
+      'BANK NIFTY': [
+        { name: 'HDFC Bank', symbol: 'HDFCBANK', weight: '28.2%', price: 1680.50, change: '+0.85%' },
+        { name: 'ICICI Bank', symbol: 'ICICIBANK', weight: '23.4%', price: 1220.10, change: '+0.42%' },
+        { name: 'State Bank of India', symbol: 'SBIN', weight: '11.5%', price: 825.60, change: '+0.95%' },
+        { name: 'Axis Bank', symbol: 'AXISBANK', weight: '9.8%', price: 1190.20, change: '+0.30%' },
+        { name: 'Kotak Mahindra Bank', symbol: 'KOTAKBANK', weight: '8.7%', price: 1740.00, change: '-0.20%' },
+      ],
+      'NIFTY IT': [
+        { name: 'Tata Consultancy Services', symbol: 'TCS', weight: '27.4%', price: 4230.15, change: '+1.22%' },
+        { name: 'Infosys', symbol: 'INFY', weight: '25.8%', price: 1845.60, change: '+1.65%' },
+        { name: 'HCL Technologies', symbol: 'HCLTECH', weight: '12.1%', price: 1710.40, change: '+1.80%' },
+        { name: 'Wipro', symbol: 'WIPRO', weight: '9.2%', price: 540.20, change: '+0.65%' },
+        { name: 'Tech Mahindra', symbol: 'TECHM', weight: '8.5%', price: 1530.00, change: '+1.10%' },
+      ]
+    };
+
+    const key = idx ? idx.symbol : 'NIFTY 50';
+    const constituents = constituentsMap[key] || constituentsMap['NIFTY 50'];
+
+    return {
+      ...idx,
+      monthHigh: Math.round(val * 1.042 * 100) / 100,
+      monthLow: Math.round(val * 0.965 * 100) / 100,
+      monthGainPts,
+      monthReturnPct,
+      yearHigh: Math.round(val * 1.12 * 100) / 100,
+      yearLow: Math.round(val * 0.82 * 100) / 100,
+      peRatio: 22.8,
+      pbRatio: 3.9,
+      dividendYield: '1.24%',
+      constituents
+    };
   }
 
   // Global search across Stocks, Mutual Funds, IPOs, and Indices

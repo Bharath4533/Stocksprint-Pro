@@ -12,36 +12,42 @@ class KycOnboardingScreen extends StatefulWidget {
 class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   int _currentStep = 0;
 
-  final TextEditingController _phoneController = TextEditingController(text: '+91 9876543210');
+  // Blank initial controllers - user must enter their real details
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _phoneOtpController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController(text: 'user@nextrade.in');
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _emailOtpController = TextEditingController();
-  final TextEditingController _panController = TextEditingController(text: 'ABCDE1234F');
-  final TextEditingController _bankAccController = TextEditingController(text: '50100492837192');
-  final TextEditingController _ifscController = TextEditingController(text: 'HDFC0001234');
-  String _bankLookupInfo = '';
+  final TextEditingController _panController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _bankAccController = TextEditingController();
+  final TextEditingController _ifscController = TextEditingController();
+  final TextEditingController _nomineeNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
+  String _maritalStatus = 'Single';
+  String _occupation = 'Salaried';
+  String _nomineeRelation = 'Spouse';
+  String _riskProfile = 'GROWTH';
+  String _bankLookupInfo = '';
   bool _isSendingOtp = false;
 
   final List<String> _stepTitles = [
-    'Mobile Verification (SMS OTP)',
-    'Mobile OTP Confirmation',
-    'Email Address Verification',
-    'Email OTP Confirmation',
-    'PAN Card Tax Check',
-    'Date of Birth',
-    'Bank & Live RBI IFSC',
-    'Nominee Declaration',
-    'Residential Address',
-    'Aadhaar DigiLocker',
-    'Risk Assessment',
-    'Final Confirmation',
+    'Mobile Phone Verification (SMS OTP)',
+    'Enter Mobile OTP Code',
+    'Registered Email Verification',
+    'Enter Email Confirmation Code',
+    'PAN Card Validation',
+    'Personal Details (DOB, Marital, Occupation)',
+    'Bank Account & Live RBI IFSC Lookup',
+    'SEBI Nominee Declaration',
+    'Communication Address',
+    'Investor Risk Profile & Activation',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Real KYC Onboarding')),
+      appBar: AppBar(title: const Text('Indian KYC Verification')),
       body: Stepper(
         currentStep: _currentStep,
         onStepContinue: () => _handleStepContinue(),
@@ -77,14 +83,19 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           children: [
             TextField(
               controller: _phoneController,
-              decoration: const InputDecoration(labelText: 'Mobile Number', border: OutlineInputBorder()),
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelText: '10-Digit Mobile Number',
+                hintText: 'Enter your 10-digit mobile number',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _isSendingOtp ? null : _sendPhoneOtp,
               child: _isSendingOtp
                   ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Text('Send Real SMS OTP'),
+                  : const Text('📲 Send Real SMS OTP'),
             ),
           ],
         );
@@ -96,7 +107,11 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
             TextField(
               controller: _phoneOtpController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: '6-Digit SMS Code', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: '6-Digit SMS Code',
+                hintText: 'Enter code received on mobile',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(onPressed: _verifyPhoneOtp, child: const Text('Verify Phone OTP')),
@@ -109,12 +124,17 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email Address', border: OutlineInputBorder()),
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelText: 'Registered Email Address',
+                hintText: 'name@domain.com',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _isSendingOtp ? null : _sendEmailOtp,
-              child: const Text('Send Email Verification Code'),
+              child: const Text('📧 Send Email Verification Code'),
             ),
           ],
         );
@@ -126,10 +146,14 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
             TextField(
               controller: _emailOtpController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: '6-Digit Email Code', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: '6-Digit Email Code',
+                hintText: 'Enter code from email inbox',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(onPressed: _verifyEmailOtp, child: const Text('Verify Email Code')),
+            ElevatedButton(onPressed: _verifyEmailOtp, child: const Text('Confirm Email')),
           ],
         );
 
@@ -139,23 +163,69 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           children: [
             TextField(
               controller: _panController,
-              decoration: const InputDecoration(labelText: '10-Digit PAN Number', border: OutlineInputBorder()),
+              textCapitalization: TextCapitalization.characters,
+              decoration: const InputDecoration(
+                labelText: '10-Character PAN Number',
+                hintText: 'e.g. ABCDE1234F',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(onPressed: _verifyPan, child: const Text('Verify PAN Format')),
+            ElevatedButton(onPressed: _verifyPan, child: const Text('Validate PAN with Tax Registry')),
           ],
         );
 
       case 5:
-        return const TextField(decoration: InputDecoration(labelText: 'Date of Birth (YYYY-MM-DD)', border: OutlineInputBorder()));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _dobController,
+              decoration: const InputDecoration(labelText: 'Date of Birth (YYYY-MM-DD)', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _maritalStatus,
+              decoration: const InputDecoration(labelText: 'Marital Status', border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'Single', child: Text('Single')),
+                DropdownMenuItem(value: 'Married', child: Text('Married')),
+                DropdownMenuItem(value: 'Other', child: Text('Other')),
+              ],
+              onChanged: (v) => setState(() => _maritalStatus = v ?? 'Single'),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _occupation,
+              decoration: const InputDecoration(labelText: 'Occupation', border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'Salaried', child: Text('Salaried')),
+                DropdownMenuItem(value: 'Self-Employed', child: Text('Self-Employed')),
+                DropdownMenuItem(value: 'Business', child: Text('Business')),
+                DropdownMenuItem(value: 'Professional', child: Text('Professional')),
+                DropdownMenuItem(value: 'Student', child: Text('Student')),
+                DropdownMenuItem(value: 'Retired', child: Text('Retired')),
+              ],
+              onChanged: (v) => setState(() => _occupation = v ?? 'Salaried'),
+            ),
+          ],
+        );
 
       case 6:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(controller: _bankAccController, decoration: const InputDecoration(labelText: 'Account Number', border: OutlineInputBorder())),
+            TextField(
+              controller: _bankAccController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Bank Account Number', hintText: 'Enter 9-18 digit account number', border: OutlineInputBorder()),
+            ),
             const SizedBox(height: 10),
-            TextField(controller: _ifscController, decoration: const InputDecoration(labelText: 'IFSC Code', border: OutlineInputBorder())),
+            TextField(
+              controller: _ifscController,
+              textCapitalization: TextCapitalization.characters,
+              decoration: const InputDecoration(labelText: 'IFSC Code', hintText: 'e.g. HDFC0001234', border: OutlineInputBorder()),
+            ),
             const SizedBox(height: 10),
             ElevatedButton(onPressed: _lookupIfsc, child: const Text('Lookup RBI IFSC')),
             if (_bankLookupInfo.isNotEmpty) ...[
@@ -166,28 +236,54 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
         );
 
       case 7:
-        return const TextField(decoration: InputDecoration(labelText: 'Nominee Name (e.g. Ananya Devan - Spouse)', border: OutlineInputBorder()));
-
-      case 8:
-        return const TextField(decoration: InputDecoration(labelText: 'Address', border: OutlineInputBorder()));
-
-      case 9:
-        return Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: AppTheme.gainGreen.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
-          child: const Text('✅ DigiLocker Aadhaar Verification Gateway Connected', style: TextStyle(color: AppTheme.gainGreen, fontWeight: FontWeight.w700)),
-        );
-
-      case 10:
-        return const Text('Risk Profile: Growth & Moderate Capital Appreciation');
-
-      case 11:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('🎉 KYC Ready for Submission', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
-            SizedBox(height: 4),
-            Text('Your ₹5,00,000 simulated trading balance will be activated immediately.'),
+          children: [
+            TextField(
+              controller: _nomineeNameController,
+              decoration: const InputDecoration(labelText: 'Nominee Full Name', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _nomineeRelation,
+              decoration: const InputDecoration(labelText: 'Relationship', border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'Spouse', child: Text('Spouse')),
+                DropdownMenuItem(value: 'Father', child: Text('Father')),
+                DropdownMenuItem(value: 'Mother', child: Text('Mother')),
+                DropdownMenuItem(value: 'Child', child: Text('Child')),
+                DropdownMenuItem(value: 'Sibling', child: Text('Sibling')),
+              ],
+              onChanged: (v) => setState(() => _nomineeRelation = v ?? 'Spouse'),
+            ),
+          ],
+        );
+
+      case 8:
+        return TextField(
+          controller: _addressController,
+          maxLines: 3,
+          decoration: const InputDecoration(labelText: 'Full Residential Address with Pincode', border: OutlineInputBorder()),
+        );
+
+      case 9:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DropdownButtonFormField<String>(
+              value: _riskProfile,
+              decoration: const InputDecoration(labelText: 'Risk Profile', border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'CONSERVATIVE', child: Text('Conservative')),
+                DropdownMenuItem(value: 'GROWTH', child: Text('Growth & Capital Appreciation')),
+                DropdownMenuItem(value: 'AGGRESSIVE', child: Text('Aggressive (Equities & MIS)')),
+              ],
+              onChanged: (v) => setState(() => _riskProfile = v ?? 'GROWTH'),
+            ),
+            const SizedBox(height: 16),
+            const Text('🎉 Verified KYC Ready for Activation', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+            const SizedBox(height: 4),
+            const Text('Your Indian trading account will be activated with ₹5,00,000 simulated capital.'),
           ],
         );
 
@@ -205,9 +301,14 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   }
 
   Future<void> _sendPhoneOtp() async {
+    final phone = _phoneController.text.trim();
+    if (phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter your mobile number'), backgroundColor: AppTheme.lossRed));
+      return;
+    }
     setState(() => _isSendingOtp = true);
     try {
-      final res = await ApiService.post('/kyc/send-phone-otp', {'phone': _phoneController.text.trim()});
+      final res = await ApiService.post('/kyc/send-phone-otp', {'phone': phone});
       setState(() {
         _isSendingOtp = false;
         _currentStep = 1;
@@ -239,16 +340,21 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   }
 
   Future<void> _sendEmailOtp() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter your email address'), backgroundColor: AppTheme.lossRed));
+      return;
+    }
     setState(() => _isSendingOtp = true);
     try {
-      final res = await ApiService.post('/kyc/send-email-otp', {'email': _emailController.text.trim()});
+      final res = await ApiService.post('/kyc/send-email-otp', {'email': email});
       setState(() {
         _isSendingOtp = false;
         _currentStep = 3;
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(res['message'] ?? 'Email code sent!'), backgroundColor: AppTheme.gainGreen),
+          SnackBar(content: Text(res['message'] ?? 'Email code dispatched!'), backgroundColor: AppTheme.gainGreen),
         );
       }
     } catch (e) {
@@ -310,8 +416,14 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
         'phone': _phoneController.text.trim(),
         'email': _emailController.text.trim(),
         'pan': _panController.text.trim(),
+        'dob': _dobController.text.trim(),
+        'maritalStatus': _maritalStatus,
+        'occupation': _occupation,
         'bankAccount': _bankAccController.text.trim(),
         'ifsc': _ifscController.text.trim(),
+        'nominee': {'name': _nomineeNameController.text.trim(), 'relation': _nomineeRelation},
+        'address': _addressController.text.trim(),
+        'riskProfile': _riskProfile
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

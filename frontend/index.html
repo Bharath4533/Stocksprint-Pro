@@ -59,12 +59,12 @@
     </div>
   </header>
 
-  <!-- Benchmark Indices Live Ticker Ribbon -->
-  <div class="ticker-bar" id="header-ticker-bar">
-    <div class="ticker-item"><span class="ticker-symbol">NIFTY 50:</span> <span class="ticker-val">24,825.40</span> <span class="gain">+0.58%</span></div>
-    <div class="ticker-item"><span class="ticker-symbol">SENSEX:</span> <span class="ticker-val">81,550.25</span> <span class="gain">+0.57%</span></div>
-    <div class="ticker-item"><span class="ticker-symbol">BANK NIFTY:</span> <span class="ticker-val">51,240.80</span> <span class="loss">-0.17%</span></div>
-    <div class="ticker-item"><span class="ticker-symbol">NIFTY IT:</span> <span class="ticker-val">41,820.60</span> <span class="gain">+1.41%</span></div>
+  <!-- Benchmark Indices Live Ticker Ribbon (Touch/Click for 1-Month Stock Value Chart) -->
+  <div class="ticker-bar" id="header-ticker-bar" title="Touch/Click any index for 1-Month Historical Candlestick Chart">
+    <div class="ticker-item" style="cursor: pointer;" onclick="IndexModal.open('NIFTY 50')"><span class="ticker-symbol">NIFTY 50 📊:</span> <span class="ticker-val">24,825.40</span> <span class="gain">+0.58%</span></div>
+    <div class="ticker-item" style="cursor: pointer;" onclick="IndexModal.open('SENSEX')"><span class="ticker-symbol">SENSEX 📊:</span> <span class="ticker-val">81,550.25</span> <span class="gain">+0.57%</span></div>
+    <div class="ticker-item" style="cursor: pointer;" onclick="IndexModal.open('BANK NIFTY')"><span class="ticker-symbol">BANK NIFTY 📊:</span> <span class="ticker-val">51,240.80</span> <span class="loss">-0.17%</span></div>
+    <div class="ticker-item" style="cursor: pointer;" onclick="IndexModal.open('NIFTY IT')"><span class="ticker-symbol">NIFTY IT 📊:</span> <span class="ticker-val">41,820.60</span> <span class="gain">+1.41%</span></div>
   </div>
 
   <!-- App Layout with Sidebar & Main View -->
@@ -78,6 +78,14 @@
       <a href="#/markets" class="nav-item">
         <span class="nav-item-icon">📊</span>
         <span>Markets & Discover</span>
+      </a>
+      <a href="#/options-chain" class="nav-item">
+        <span class="nav-item-icon">⚡</span>
+        <span>Options Chain (Greeks)</span>
+      </a>
+      <a href="#/heatmap" class="nav-item">
+        <span class="nav-item-icon">🗺️</span>
+        <span>Sector Heatmap</span>
       </a>
       <a href="#/watchlist" class="nav-item">
         <span class="nav-item-icon">♡</span>
@@ -149,9 +157,9 @@
       <span class="mobile-nav-icon">📊</span>
       <span>Discover</span>
     </a>
-    <a href="#/watchlist" class="mobile-nav-item">
-      <span class="mobile-nav-icon">♡</span>
-      <span>Watchlist</span>
+    <a href="#/options-chain" class="mobile-nav-item">
+      <span class="mobile-nav-icon">⚡</span>
+      <span>Options</span>
     </a>
     <a href="#/portfolio" class="mobile-nav-item">
       <span class="mobile-nav-icon">💼</span>
@@ -173,11 +181,14 @@
   <script src="/js/components/toast.js"></script>
   <script src="/js/components/modal.js"></script>
   <script src="/js/components/chart.js"></script>
+  <script src="/js/components/indexModal.js"></script>
   <script src="/js/components/orderModal.js"></script>
   <script src="/js/components/search.js"></script>
   
   <script src="/js/views/dashboard.js"></script>
   <script src="/js/views/markets.js"></script>
+  <script src="/js/views/optionsChain.js"></script>
+  <script src="/js/views/heatmap.js"></script>
   <script src="/js/views/stockDetail.js"></script>
   <script src="/js/views/watchlist.js"></script>
   <script src="/js/views/portfolio.js"></script>

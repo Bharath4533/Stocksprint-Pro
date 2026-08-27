@@ -13,6 +13,24 @@ router.get('/indices', (req, res) => {
   res.json(marketDataProvider.getIndices());
 });
 
+// GET /api/markets/indices/:symbol - Index Details & 1-Month Stats
+router.get('/indices/:symbol', (req, res) => {
+  const symbol = decodeURIComponent(req.params.symbol);
+  res.json(marketDataProvider.getIndexDetails(symbol));
+});
+
+// GET /api/markets/indices/:symbol/chart - 1M Candlestick/Line Chart for Index
+router.get('/indices/:symbol/chart', (req, res) => {
+  const symbol = decodeURIComponent(req.params.symbol);
+  const range = req.query.range || '1M';
+  const candles = marketDataProvider.getHistoricalCandles(symbol, range);
+  res.json({
+    symbol,
+    range,
+    candles
+  });
+});
+
 // GET /api/markets/gainers
 router.get('/gainers', (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 6;

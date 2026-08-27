@@ -16,7 +16,9 @@ const App = {
     profile: ProfileView,
     support: SupportView,
     legal: LegalView,
-    admin: AdminView
+    admin: AdminView,
+    'options-chain': OptionsChainView,
+    heatmap: HeatmapView
   },
 
   async init() {

@@ -23,6 +23,7 @@ const profileRoutes = require('./routes/profile');
 const supportRoutes = require('./routes/support');
 const adminRoutes = require('./routes/admin');
 const legalRoutes = require('./routes/legal');
+const kycRoutes = require('./routes/kyc');
 
 const app = express();
 
@@ -154,6 +155,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/support', supportRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/legal', legalRoutes);
+app.use('/api/kyc', kycRoutes);
 
 const supabaseService = require('./services/supabaseService');
 

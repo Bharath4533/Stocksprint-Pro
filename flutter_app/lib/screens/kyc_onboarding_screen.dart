@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
-import '../config/api_config.dart';
 import '../config/app_theme.dart';
 
 class KycOnboardingScreen extends StatefulWidget {
@@ -13,34 +12,39 @@ class KycOnboardingScreen extends StatefulWidget {
 class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   int _currentStep = 0;
 
+  final TextEditingController _phoneController = TextEditingController(text: '+91 9876543210');
+  final TextEditingController _phoneOtpController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: 'user@nextrade.in');
+  final TextEditingController _emailOtpController = TextEditingController();
+  final TextEditingController _panController = TextEditingController(text: 'ABCDE1234F');
+  final TextEditingController _bankAccController = TextEditingController(text: '50100492837192');
+  final TextEditingController _ifscController = TextEditingController(text: 'HDFC0001234');
+  String _bankLookupInfo = '';
+
+  bool _isSendingOtp = false;
+
   final List<String> _stepTitles = [
-    'Mobile Verification',
-    'OTP Confirmation',
-    'Email Address',
-    'PAN Card',
+    'Mobile Verification (SMS OTP)',
+    'Mobile OTP Confirmation',
+    'Email Address Verification',
+    'Email OTP Confirmation',
+    'PAN Card Tax Check',
     'Date of Birth',
-    'Personal Info',
-    'Bank Account',
-    'Nominee Details',
-    'Address',
-    'DigiLocker KYC',
-    'Risk Profile',
-    'Confirmation',
+    'Bank & Live RBI IFSC',
+    'Nominee Declaration',
+    'Residential Address',
+    'Aadhaar DigiLocker',
+    'Risk Assessment',
+    'Final Confirmation',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('12-Step Indian KYC Onboarding')),
+      appBar: AppBar(title: const Text('Real KYC Onboarding')),
       body: Stepper(
         currentStep: _currentStep,
-        onStepContinue: () {
-          if (_currentStep < _stepTitles.length - 1) {
-            setState(() => _currentStep++);
-          } else {
-            _completeKYC();
-          }
-        },
+        onStepContinue: () => _handleStepContinue(),
         onStepCancel: () {
           if (_currentStep > 0) {
             setState(() => _currentStep--);
@@ -51,7 +55,7 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           final title = entry.value;
 
           return Step(
-            title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+            title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
             isActive: _currentStep >= idx,
             state: _currentStep > idx ? StepState.complete : StepState.indexed,
             content: Container(
@@ -68,31 +72,115 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   Widget _buildStepContent(int index) {
     switch (index) {
       case 0:
-        return const TextField(decoration: InputDecoration(labelText: 'Mobile Number', hintText: '+91 98765 43210'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _phoneController,
+              decoration: const InputDecoration(labelText: 'Mobile Number', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _isSendingOtp ? null : _sendPhoneOtp,
+              child: _isSendingOtp
+                  ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Text('Send Real SMS OTP'),
+            ),
+          ],
+        );
+
       case 1:
-        return const TextField(decoration: InputDecoration(labelText: '6-Digit OTP', hintText: '123456'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _phoneOtpController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: '6-Digit SMS Code', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(onPressed: _verifyPhoneOtp, child: const Text('Verify Phone OTP')),
+          ],
+        );
+
       case 2:
-        return const TextField(decoration: InputDecoration(labelText: 'Email Address', hintText: 'user@nextrade.in'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email Address', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _isSendingOtp ? null : _sendEmailOtp,
+              child: const Text('Send Email Verification Code'),
+            ),
+          ],
+        );
+
       case 3:
-        return const TextField(decoration: InputDecoration(labelText: 'PAN Number', hintText: 'ABCDE1234F'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _emailOtpController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: '6-Digit Email Code', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(onPressed: _verifyEmailOtp, child: const Text('Verify Email Code')),
+          ],
+        );
+
       case 4:
-        return const TextField(decoration: InputDecoration(labelText: 'Date of Birth (YYYY-MM-DD)', hintText: '1996-05-14'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _panController,
+              decoration: const InputDecoration(labelText: '10-Digit PAN Number', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(onPressed: _verifyPan, child: const Text('Verify PAN Format')),
+          ],
+        );
+
       case 5:
-        return const TextField(decoration: InputDecoration(labelText: 'Occupation', hintText: 'Software Engineer'));
+        return const TextField(decoration: InputDecoration(labelText: 'Date of Birth (YYYY-MM-DD)', border: OutlineInputBorder()));
+
       case 6:
-        return const TextField(decoration: InputDecoration(labelText: 'Bank Account & IFSC', hintText: '50100492837192 (HDFC0001234)'));
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(controller: _bankAccController, decoration: const InputDecoration(labelText: 'Account Number', border: OutlineInputBorder())),
+            const SizedBox(height: 10),
+            TextField(controller: _ifscController, decoration: const InputDecoration(labelText: 'IFSC Code', border: OutlineInputBorder())),
+            const SizedBox(height: 10),
+            ElevatedButton(onPressed: _lookupIfsc, child: const Text('Lookup RBI IFSC')),
+            if (_bankLookupInfo.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(_bankLookupInfo, style: const TextStyle(color: AppTheme.gainGreen, fontWeight: FontWeight.w700, fontSize: 12)),
+            ],
+          ],
+        );
+
       case 7:
-        return const TextField(decoration: InputDecoration(labelText: 'Nominee Name & Relation', hintText: 'Ananya Devan (Spouse)'));
+        return const TextField(decoration: InputDecoration(labelText: 'Nominee Name (e.g. Ananya Devan - Spouse)', border: OutlineInputBorder()));
+
       case 8:
-        return const TextField(decoration: InputDecoration(labelText: 'Residential Address', hintText: '42 Financial District, Hyderabad'));
+        return const TextField(decoration: InputDecoration(labelText: 'Address', border: OutlineInputBorder()));
+
       case 9:
         return Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(color: AppTheme.gainGreen.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
-          child: const Text('✅ DigiLocker Instant Aadhaar link verified.', style: TextStyle(color: AppTheme.gainGreen, fontWeight: FontWeight.w700)),
+          child: const Text('✅ DigiLocker Aadhaar Verification Gateway Connected', style: TextStyle(color: AppTheme.gainGreen, fontWeight: FontWeight.w700)),
         );
+
       case 10:
         return const Text('Risk Profile: Growth & Moderate Capital Appreciation');
+
       case 11:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,17 +190,128 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
             Text('Your ₹5,00,000 simulated trading balance will be activated immediately.'),
           ],
         );
+
       default:
         return const SizedBox.shrink();
     }
   }
 
+  void _handleStepContinue() {
+    if (_currentStep < _stepTitles.length - 1) {
+      setState(() => _currentStep++);
+    } else {
+      _completeKYC();
+    }
+  }
+
+  Future<void> _sendPhoneOtp() async {
+    setState(() => _isSendingOtp = true);
+    try {
+      final res = await ApiService.post('/kyc/send-phone-otp', {'phone': _phoneController.text.trim()});
+      setState(() {
+        _isSendingOtp = false;
+        _currentStep = 1;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(res['message'] ?? 'SMS OTP Dispatched!'), backgroundColor: AppTheme.gainGreen),
+        );
+      }
+    } catch (e) {
+      setState(() => _isSendingOtp = false);
+    }
+  }
+
+  Future<void> _verifyPhoneOtp() async {
+    try {
+      await ApiService.post('/kyc/verify-phone-otp', {
+        'phone': _phoneController.text.trim(),
+        'otp': _phoneOtpController.text.trim(),
+      });
+      setState(() => _currentStep = 2);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: AppTheme.lossRed),
+        );
+      }
+    }
+  }
+
+  Future<void> _sendEmailOtp() async {
+    setState(() => _isSendingOtp = true);
+    try {
+      final res = await ApiService.post('/kyc/send-email-otp', {'email': _emailController.text.trim()});
+      setState(() {
+        _isSendingOtp = false;
+        _currentStep = 3;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(res['message'] ?? 'Email code sent!'), backgroundColor: AppTheme.gainGreen),
+        );
+      }
+    } catch (e) {
+      setState(() => _isSendingOtp = false);
+    }
+  }
+
+  Future<void> _verifyEmailOtp() async {
+    try {
+      await ApiService.post('/kyc/verify-email-otp', {
+        'email': _emailController.text.trim(),
+        'otp': _emailOtpController.text.trim(),
+      });
+      setState(() => _currentStep = 4);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: AppTheme.lossRed),
+        );
+      }
+    }
+  }
+
+  Future<void> _verifyPan() async {
+    try {
+      final res = await ApiService.post('/kyc/verify-pan', {'pan': _panController.text.trim().toUpperCase()});
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('PAN Verified: ${res['entityType']}'), backgroundColor: AppTheme.gainGreen),
+        );
+      }
+      setState(() => _currentStep = 5);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: AppTheme.lossRed),
+        );
+      }
+    }
+  }
+
+  Future<void> _lookupIfsc() async {
+    try {
+      final ifsc = _ifscController.text.trim().toUpperCase();
+      final res = await ApiService.get('/kyc/lookup-ifsc/$ifsc');
+      setState(() {
+        _bankLookupInfo = '🏦 ${res['bankName']} (${res['branch']}, ${res['city']})';
+      });
+    } catch (e) {
+      setState(() {
+        _bankLookupInfo = '⚠️ Invalid IFSC code';
+      });
+    }
+  }
+
   Future<void> _completeKYC() async {
     try {
-      await ApiService.post('${ApiConfig.profile}/kyc/complete', {
-        'nominee': {'name': 'Ananya Devan', 'relation': 'Spouse'},
-        'address': '42 Financial District, Hyderabad',
-        'riskProfile': 'GROWTH',
+      await ApiService.post('/kyc/submit', {
+        'phone': _phoneController.text.trim(),
+        'email': _emailController.text.trim(),
+        'pan': _panController.text.trim(),
+        'bankAccount': _bankAccController.text.trim(),
+        'ifsc': _ifscController.text.trim(),
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

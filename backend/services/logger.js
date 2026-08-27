@@ -29,6 +29,10 @@ class StructuredLogger {
     return entry;
   }
 
+  audit(userId, action, details) {
+    return this.logAudit({ userId, action, details });
+  }
+
   info(msg, meta = {}) {
     console.log(`[INFO] [${new Date().toISOString()}] ${msg}`, Object.keys(meta).length ? meta : '');
   }

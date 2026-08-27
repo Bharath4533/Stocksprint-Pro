@@ -255,6 +255,74 @@ async function runIntegrationTests() {
     assert.strictEqual(ipoRes.data.application.status, 'Submitted');
   });
 
+  // 10. Real Indian KYC & OTP Verification Flow
+  await test('Real KYC: Send & Verify Mobile Phone SMS OTP', async () => {
+    const sendRes = await request('/api/kyc/send-phone-otp', {
+      method: 'POST',
+      body: { phone: '+919876543210' }
+    });
+    assert.strictEqual(sendRes.status, 200);
+    assert.strictEqual(sendRes.data.success, true);
+    const otp = sendRes.data.devOtp || '123456';
+
+    const verifyRes = await request('/api/kyc/verify-phone-otp', {
+      method: 'POST',
+      body: { phone: '+919876543210', otp }
+    });
+    assert.strictEqual(verifyRes.status, 200);
+    assert.strictEqual(verifyRes.data.success, true);
+  });
+
+  await test('Real KYC: Send & Verify Email OTP', async () => {
+    const sendRes = await request('/api/kyc/send-email-otp', {
+      method: 'POST',
+      body: { email: 'bharath@nextrade.in' }
+    });
+    assert.strictEqual(sendRes.status, 200);
+    assert.strictEqual(sendRes.data.success, true);
+    const otp = sendRes.data.devOtp || '123456';
+
+    const verifyRes = await request('/api/kyc/verify-email-otp', {
+      method: 'POST',
+      body: { email: 'bharath@nextrade.in', otp }
+    });
+    assert.strictEqual(verifyRes.status, 200);
+    assert.strictEqual(verifyRes.data.success, true);
+  });
+
+  await test('Real KYC: Strict PAN Format & Entity Validation', async () => {
+    const panRes = await request('/api/kyc/verify-pan', {
+      method: 'POST',
+      body: { pan: 'ABCPE1234F', fullName: 'Bharath Devan' }
+    });
+    assert.strictEqual(panRes.status, 200);
+    assert.strictEqual(panRes.data.success, true);
+    assert.strictEqual(panRes.data.entityType, 'Individual (Person)');
+    assert.strictEqual(panRes.data.isIndividual, true);
+  });
+
+  await test('Real KYC: Live RBI IFSC Directory Lookup', async () => {
+    const ifscRes = await request('/api/kyc/lookup-ifsc/HDFC0001234');
+    assert.strictEqual(ifscRes.status, 200);
+    assert.strictEqual(ifscRes.data.success, true);
+    assert(ifscRes.data.bankName);
+  });
+
+  await test('Real KYC: Final Profile Submission', async () => {
+    const subRes = await request('/api/kyc/submit', {
+      method: 'POST',
+      body: {
+        phone: '+919876543210',
+        email: 'bharath@nextrade.in',
+        pan: 'ABCDE1234F',
+        bankAccount: '50100492837192',
+        ifsc: 'HDFC0001234'
+      }
+    });
+    assert.strictEqual(subRes.status, 200);
+    assert.strictEqual(subRes.data.kycStatus, 'VERIFIED');
+  });
+
   console.log(`\nIntegration Tests Result: ${passed}/${total} passed.\n`);
   if (passed !== total) process.exit(1);
 }

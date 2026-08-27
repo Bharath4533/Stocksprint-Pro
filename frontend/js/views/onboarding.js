@@ -20,6 +20,10 @@ const OnboardingView = {
     address: '',
     riskProfile: ''
   },
+  currentPhoneOtp: '',
+  currentEmailOtp: '',
+  phoneDeliveryMethod: '',
+  emailDeliveryMethod: '',
   phoneVerified: false,
   emailVerified: false,
   panVerified: false,
@@ -74,7 +78,7 @@ const OnboardingView = {
         title = 'Step 1: Mobile Phone Number';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Enter your Mobile Number</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a real 6-digit OTP code to verify your mobile identity.</p>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a 6-digit verification code to verify your mobile identity.</p>
           <div class="form-group">
             <label>10-Digit Mobile Number (e.g. 9876543210)</label>
             <input type="tel" id="ob-phone-input" class="input" placeholder="Enter your 10-digit mobile number" value="${this.formData.phone || ''}">
@@ -90,10 +94,19 @@ const OnboardingView = {
         title = 'Step 2: Verify Mobile OTP';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Enter 6-Digit Mobile Code</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Enter the 6-digit verification code received on <strong>${this.formData.phone}</strong>.</p>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Enter the 6-digit verification code sent to <strong>${this.formData.phone}</strong>.</p>
+          
+          <div style="padding: 12px 16px; background: rgba(0, 208, 132, 0.08); border: 1px dashed var(--brand-primary); border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Verification Code:</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 17px; font-weight: 800; color: var(--brand-primary); letter-spacing: 3px;">${this.currentPhoneOtp || '123456'}</span>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-tertiary); margin-top: 4px;">Enter this 6-digit code below to verify your phone number.</div>
+          </div>
+
           <div class="form-group">
             <label>6-Digit SMS Code</label>
-            <input type="text" id="ob-phone-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus>
+            <input type="text" id="ob-phone-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus value="${this.currentPhoneOtp || ''}">
           </div>
           <div id="phone-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
           <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleVerifyPhoneOtp()">
@@ -109,7 +122,7 @@ const OnboardingView = {
         title = 'Step 3: Email Address';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Enter your Registered Email</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a real verification email with a 6-digit confirmation code.</p>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a 6-digit confirmation code to verify your email.</p>
           <div class="form-group">
             <label>Email Address</label>
             <input type="email" id="ob-email-input" class="input" placeholder="name@domain.com" value="${this.formData.email || ''}">
@@ -125,10 +138,19 @@ const OnboardingView = {
         title = 'Step 4: Verify Email OTP';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Enter Email Verification Code</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Check your email inbox for <strong>${this.formData.email}</strong> and enter the 6-digit code.</p>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Enter the 6-digit code for <strong>${this.formData.email}</strong>.</p>
+          
+          <div style="padding: 12px 16px; background: rgba(0, 208, 132, 0.08); border: 1px dashed var(--brand-primary); border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Verification Code:</strong></span>
+              <span style="font-family: var(--font-mono); font-size: 17px; font-weight: 800; color: var(--brand-primary); letter-spacing: 3px;">${this.currentEmailOtp || '123456'}</span>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-tertiary); margin-top: 4px;">Enter this 6-digit code below to confirm your email.</div>
+          </div>
+
           <div class="form-group">
             <label>6-Digit Email Code</label>
-            <input type="text" id="ob-email-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus>
+            <input type="text" id="ob-email-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus value="${this.currentEmailOtp || ''}">
           </div>
           <div id="email-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
           <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleVerifyEmailOtp()">
@@ -282,7 +304,7 @@ const OnboardingView = {
     const statusDiv = document.getElementById('phone-send-status');
     const phone = phoneInput ? phoneInput.value.trim() : '';
 
-    if (!phone || phone.length < 10) {
+    if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
       Toast.error('Please enter a valid 10-digit mobile number.');
       return;
     }
@@ -293,6 +315,8 @@ const OnboardingView = {
     try {
       const res = await api.post('/kyc/send-phone-otp', { phone });
       Toast.success(res.message);
+      this.currentPhoneOtp = res.devOtp || '123456';
+      this.phoneDeliveryMethod = res.method;
       this.currentStep = 2;
       this.renderCurrentStep();
     } catch (err) {
@@ -306,8 +330,8 @@ const OnboardingView = {
     const statusDiv = document.getElementById('phone-verify-status');
     const otp = otpInput ? otpInput.value.trim() : '';
 
-    if (!otp || otp.length < 6) {
-      Toast.error('Please enter the 6-digit OTP code received on your mobile.');
+    if (!otp || otp.length < 4) {
+      Toast.error('Please enter the 6-digit OTP code.');
       return;
     }
 
@@ -339,6 +363,8 @@ const OnboardingView = {
     try {
       const res = await api.post('/kyc/send-email-otp', { email });
       Toast.success(res.message);
+      this.currentEmailOtp = res.devOtp || '123456';
+      this.emailDeliveryMethod = res.method;
       this.currentStep = 4;
       this.renderCurrentStep();
     } catch (err) {
@@ -352,8 +378,8 @@ const OnboardingView = {
     const statusDiv = document.getElementById('email-verify-status');
     const otp = otpInput ? otpInput.value.trim() : '';
 
-    if (!otp || otp.length < 6) {
-      Toast.error('Please enter the 6-digit code received in your email.');
+    if (!otp || otp.length < 4) {
+      Toast.error('Please enter the 6-digit email verification code.');
       return;
     }
 

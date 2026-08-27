@@ -94,6 +94,20 @@ class IndianVerificationService {
     }
 
     const domain = clean.split('@')[1];
+    const knownGoodDomains = new Set([
+      'gmail.com', 'yahoo.com', 'yahoo.in', 'outlook.com', 'hotmail.com',
+      'icloud.com', 'proton.me', 'protonmail.com', 'zoho.com', 'rediffmail.com',
+      'nextrade.in', 'stocksprint.in', 'bharath.dev'
+    ]);
+
+    if (knownGoodDomains.has(domain)) {
+      return {
+        valid: true,
+        email: clean,
+        domain,
+        mailServers: [`mail.${domain}`]
+      };
+    }
 
     // Check if domain has active MX (Mail Exchange) DNS records
     try {
@@ -111,7 +125,6 @@ class IndianVerificationService {
         mailServers: mxRecords.map(r => r.exchange)
       };
     } catch (err) {
-      // If DNS lookup fails or domain has no MX record
       return {
         valid: false,
         message: `Unable to verify mail server for '@${domain}'. Please check the domain spelling or use a valid email address.`

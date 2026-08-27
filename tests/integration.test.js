@@ -290,6 +290,31 @@ async function runIntegrationTests() {
     assert.strictEqual(verifyRes.data.success, true);
   });
 
+  await test('Real KYC: Rejection of Invalid / Dummy Mobile Number', async () => {
+    const invalidPhoneRes = await request('/api/kyc/send-phone-otp', {
+      method: 'POST',
+      body: { phone: '0000000000' }
+    });
+    assert.strictEqual(invalidPhoneRes.status, 400);
+  });
+
+  await test('Real KYC: Rejection of Fake Email Domain (No MX Records)', async () => {
+    const fakeEmailRes = await request('/api/kyc/send-email-otp', {
+      method: 'POST',
+      body: { email: 'user@nonexistentfakedomain123456789.xyz' }
+    });
+    assert.strictEqual(fakeEmailRes.status, 400);
+  });
+
+  await test('Real KYC: UIDAI Verhoeff Aadhaar Validation', async () => {
+    // Test invalid Aadhaar
+    const invalidAadhaar = await request('/api/kyc/verify-aadhaar', {
+      method: 'POST',
+      body: { aadhaar: '012345678901' }
+    });
+    assert.strictEqual(invalidAadhaar.status, 400);
+  });
+
   await test('Real KYC: Strict PAN Format & Entity Validation', async () => {
     const panRes = await request('/api/kyc/verify-pan', {
       method: 'POST',
@@ -301,11 +326,23 @@ async function runIntegrationTests() {
     assert.strictEqual(panRes.data.isIndividual, true);
   });
 
-  await test('Real KYC: Live RBI IFSC Directory Lookup', async () => {
+  await test('Real KYC: Live RBI IFSC Directory Lookup & Bank Verification', async () => {
     const ifscRes = await request('/api/kyc/lookup-ifsc/HDFC0001234');
     assert.strictEqual(ifscRes.status, 200);
     assert.strictEqual(ifscRes.data.success, true);
     assert(ifscRes.data.bankName);
+
+    const bankRes = await request('/api/kyc/verify-bank', {
+      method: 'POST',
+      body: {
+        accountNumber: '50100492837192',
+        ifsc: 'HDFC0001234',
+        accountHolderName: 'Bharath Devan'
+      }
+    });
+    assert.strictEqual(bankRes.status, 200);
+    assert.strictEqual(bankRes.data.success, true);
+    assert.strictEqual(bankRes.data.status, 'VERIFIED');
   });
 
   await test('Real KYC: Final Profile Submission', async () => {
@@ -313,8 +350,8 @@ async function runIntegrationTests() {
       method: 'POST',
       body: {
         phone: '+919876543210',
-        email: 'bharath@nextrade.in',
-        pan: 'ABCDE1234F',
+        email: 'bharath@gmail.com',
+        pan: 'ABCPE1234F',
         bankAccount: '50100492837192',
         ifsc: 'HDFC0001234'
       }

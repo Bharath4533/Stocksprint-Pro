@@ -230,11 +230,17 @@ const OnboardingView = {
         title = 'Step 10: Digital Aadhaar / DigiLocker';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Aadhaar DigiLocker Verification</h3>
-          <div style="padding: 16px; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); margin-bottom: 16px;">
-            <div style="font-weight: 700; color: var(--gain-green);">✅ DigiLocker Instant Gateway Connected</div>
-            <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 4px;">Aadhaar documents retrieved securely via government DigiLocker gateway.</div>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">12-digit Aadhaar verification using official UIDAI Verhoeff Checksum.</p>
+          <div class="form-group">
+            <label>12-Digit Aadhaar Number</label>
+            <input type="text" id="ob-aadhaar-input" class="input" placeholder="e.g. 5489 6523 9845" value="${this.formData.aadhaar || '548965239845'}" maxlength="14" style="letter-spacing: 2px; font-family: var(--font-mono); font-size: 16px;">
           </div>
-          <button class="btn btn-primary" style="width: 100%;" onclick="OnboardingView.nextStep()">Proceed</button>
+          <div id="aadhaar-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
+          <div style="padding: 14px; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); margin-bottom: 16px; border-left: 3px solid var(--gain-green);">
+            <div style="font-weight: 700; color: var(--gain-green); font-size: 13px;">🔒 DigiLocker Instant e-KYC Gateway</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">Government UIDAI & DigiLocker encrypted verification channel.</div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;" onclick="OnboardingView.handleVerifyAadhaar()">Verify Aadhaar with DigiLocker</button>
         `;
         break;
 
@@ -442,6 +448,28 @@ const OnboardingView = {
       this.currentStep = 8;
       this.renderCurrentStep();
     } catch (err) {
+      Toast.error(err.message);
+    }
+  },
+
+  async handleVerifyAadhaar() {
+    const aadhaarInput = document.getElementById('ob-aadhaar-input');
+    const statusDiv = document.getElementById('aadhaar-verify-status');
+    const aadhaar = aadhaarInput ? aadhaarInput.value.trim().replace(/[\s\-]/g, '') : '';
+
+    if (!aadhaar || aadhaar.length !== 12) {
+      Toast.error('Aadhaar number must be exactly 12 numeric digits.');
+      return;
+    }
+
+    try {
+      const res = await api.post('/kyc/verify-aadhaar', { aadhaar });
+      this.formData.aadhaar = aadhaar;
+      Toast.success(res.message);
+      this.currentStep = 11;
+      this.renderCurrentStep();
+    } catch (err) {
+      if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
       Toast.error(err.message);
     }
   },

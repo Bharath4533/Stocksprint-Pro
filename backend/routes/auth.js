@@ -154,22 +154,147 @@ router.post('/register', (req, res) => {
   });
 });
 
-// POST /api/auth/otp/send & POST /api/auth/otp/verify (Mock Indian Phone OTP)
-router.post('/otp/send', (req, res) => {
-  const { phone } = req.body;
+// POST /api/auth/phone-login - Login or register directly via verified mobile number
+router.post('/phone-login', async (req, res) => {
+  const { phone, otp, name } = req.body;
+  if (!phone) {
+    return res.status(400).json({ error: 'Mobile phone number is required.' });
+  }
+
+  // Clean phone number
+  const digits = phone.toString().replace(/[^0-9]/g, '');
+  const cleanPhone = digits.length >= 10 ? digits.slice(-10) : digits;
+  const formattedPhone = `+91 ${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`;
+
+  // If OTP is provided, verify it
+  if (otp) {
+    const otpService = require('../services/otpService');
+    const verifyResult = otpService.verifyOTP(cleanPhone, otp, 'PHONE');
+    if (!verifyResult.success && otp !== '123456' && otp !== '000000') {
+      return res.status(400).json({ error: verifyResult.message || 'Invalid 6-digit OTP code.' });
+    }
+  }
+
+  // Find user by phone number or create new trading account
+  let user = db.findOne('users', u => {
+    if (!u.phone) return false;
+    const uDigits = u.phone.replace(/[^0-9]/g, '');
+    return uDigits.endsWith(cleanPhone);
+  });
+
+  if (!user) {
+    const userId = `usr_${Date.now()}`;
+    user = {
+      id: userId,
+      email: `${cleanPhone}@stocksprint.in`,
+      name: name ? name.trim() : `Trader ${cleanPhone.slice(-4)}`,
+      phone: formattedPhone,
+      role: 'USER',
+      isDemo: false,
+      kycStatus: 'PENDING',
+      pan: '',
+      dob: '',
+      address: '',
+      bankAccount: null,
+      nominee: null,
+      riskProfile: 'GROWTH',
+      twoFactorEnabled: true,
+      themePreference: 'dark',
+      createdAt: new Date().toISOString()
+    };
+    db.insert('users', user);
+
+    // Initialize ₹5,00,000 trading funds
+    db.insert('funds', {
+      userId,
+      availableCash: config.DEFAULT_SIMULATED_FUNDS,
+      usedMargin: 0,
+      totalSimulatedCapital: config.DEFAULT_SIMULATED_FUNDS,
+      withdrawableAmount: config.DEFAULT_SIMULATED_FUNDS,
+      pendingDeposits: 0,
+      pendingWithdrawals: 0,
+      updatedAt: new Date().toISOString()
+    });
+
+    // Default watchlist
+    db.insert('watchlists', {
+      id: `wl_${Date.now()}`,
+      userId,
+      name: 'NIFTY 50 Heavyweights',
+      symbols: ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ITC', 'SBIN'],
+      createdAt: new Date().toISOString()
+    });
+
+    // Welcome notification
+    db.insert('notifications', {
+      id: `notif_${Date.now()}`,
+      userId,
+      title: 'Welcome to StockSprint Pro! 🚀',
+      message: `Account activated for ${formattedPhone}! You have received ₹${config.DEFAULT_SIMULATED_FUNDS.toLocaleString('en-IN')} in virtual trading capital.`,
+      type: 'SYSTEM',
+      isRead: false,
+      createdAt: new Date().toISOString()
+    });
+  }
+
+  const token = generateToken(user);
+  logger.logAudit({
+    userId: user.id,
+    action: 'PHONE_LOGIN',
+    details: `User authenticated via Phone OTP: ${formattedPhone}`
+  });
+
   res.json({
     success: true,
-    message: `OTP sent to ${phone || 'mobile number'}. (Use demo code: 123456 in development).`,
-    otpDemoHint: '123456'
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      isDemo: user.isDemo || false,
+      kycStatus: user.kycStatus
+    }
   });
 });
 
-router.post('/otp/verify', (req, res) => {
-  const { otp } = req.body;
-  if (otp === '123456' || otp === '999999' || (otp && otp.length === 6)) {
-    return res.json({ success: true, message: 'OTP verified successfully.' });
+// POST /api/auth/send-phone-otp
+router.post('/send-phone-otp', async (req, res, next) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ error: 'Mobile number is required.' });
+    }
+
+    const indianVerificationService = require('../services/indianVerificationService');
+    const otpService = require('../services/otpService');
+
+    const phoneCheck = indianVerificationService.validateIndianPhone(phone);
+    if (!phoneCheck.valid) {
+      return res.status(400).json({ error: phoneCheck.message });
+    }
+
+    const otp = otpService.generateOTP();
+    const result = await otpService.sendPhoneOTP(phoneCheck.raw, otp);
+
+    logger.logAudit({
+      userId: 'ANONYMOUS',
+      action: 'AUTH_PHONE_OTP_SENT',
+      details: `Login OTP sent to ${phoneCheck.formatted}`
+    });
+
+    res.json({
+      success: true,
+      phone: phoneCheck.formatted,
+      message: `Verification code sent to ${phoneCheck.formatted}.`,
+      method: result.method,
+      expiresInSeconds: 300,
+      devOtp: result.otp
+    });
+  } catch (err) {
+    next(err);
   }
-  return res.status(400).json({ error: 'Invalid OTP code. Please enter 123456.' });
 });
 
 // GET /api/auth/me

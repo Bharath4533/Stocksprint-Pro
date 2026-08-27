@@ -16,8 +16,15 @@
   
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+
+  <!-- Google Firebase Web SDK for Real Phone SMS Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 </head>
 <body class="dark">
+
+  <!-- Invisible reCAPTCHA container for Google Phone SMS Gateway -->
+  <div id="recaptcha-container"></div>
 
   <!-- Top Navigation Header -->
   <header class="app-header">
@@ -39,6 +46,10 @@
         <div class="simulated-pill-dot"></div>
         <span>LIVE FEED & SIMULATED TRADING</span>
       </div>
+
+      <button class="btn btn-primary btn-sm" onclick="AuthModal.open()" title="Login or Register with Mobile Phone OTP">
+        📲 Login with Phone
+      </button>
 
       <button class="icon-btn" title="Price Alerts" onclick="window.location.hash='#/alerts'">
         🔔
@@ -178,8 +189,10 @@
   <!-- Load Frontend JavaScript Application Modules -->
   <script src="/js/state.js"></script>
   <script src="/js/api.js"></script>
+  <script src="/js/firebaseAuth.js"></script>
   <script src="/js/components/toast.js"></script>
   <script src="/js/components/modal.js"></script>
+  <script src="/js/components/authModal.js"></script>
   <script src="/js/components/chart.js"></script>
   <script src="/js/components/indexModal.js"></script>
   <script src="/js/components/orderModal.js"></script>

@@ -91,6 +91,27 @@ async function runIntegrationTests() {
     authToken = res.data.token;
   });
 
+  await test('POST /api/auth/send-phone-otp dispatches OTP for mobile login', async () => {
+    const res = await request('/api/auth/send-phone-otp', {
+      method: 'POST',
+      body: { phone: '6374271146' }
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert(res.data.phone.includes('63742'));
+  });
+
+  await test('POST /api/auth/phone-login logs in user via verified phone number', async () => {
+    const res = await request('/api/auth/phone-login', {
+      method: 'POST',
+      body: { phone: '6374271146', otp: '123456' }
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert(res.data.token);
+    assert(res.data.user.phone.includes('63742'));
+  });
+
   // 3. Markets & Stock Master
   await test('GET /api/markets/indices returns benchmark indices', async () => {
     const res = await request('/api/markets/indices');

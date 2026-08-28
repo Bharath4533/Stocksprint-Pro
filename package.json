@@ -5,6 +5,9 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
+    "mobile": "cd expo_app && npm start",
+    "mobile:android": "cd expo_app && npm run android",
+    "mobile:ios": "cd expo_app && npm run ios",
     "test": "node tests/run-tests.js"
   },
   "dependencies": {

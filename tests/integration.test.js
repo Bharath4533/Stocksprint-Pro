@@ -69,10 +69,11 @@ async function runIntegrationTests() {
     assert.strictEqual(res.data.app, 'StockSprint Pro');
   });
 
-  await test('GET /api/supabase/status returns database connection status', async () => {
-    const res = await request('/api/supabase/status');
+  await test('GET /api/firebase/status returns Firebase Firestore database sync status', async () => {
+    const res = await request('/api/firebase/status');
     assert.strictEqual(res.status, 200);
     assert(res.data.mode);
+    assert.strictEqual(res.data.syncActive, true);
   });
 
   await test('GET /api/state returns valid portfolio & stocks for backward compatibility', async () => {

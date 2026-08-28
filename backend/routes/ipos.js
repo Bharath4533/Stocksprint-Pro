@@ -34,7 +34,7 @@ router.get('/applications/me', requireAuth, (req, res) => {
 // POST /api/ipos/:id/apply - Apply for IPO (Simulated ASBA / UPI mandate flow)
 router.post('/:id/apply', requireAuth, (req, res) => {
   const { lots = 1, bidPrice, upiId } = req.body;
-  const ipo = db.findOne('ipos', i => i.id === req.params.id);
+  const ipo = db.findOne('ipos', i => i.id === req.params.id || i.symbol === req.params.id || (i.symbol && req.params.id && i.symbol.toLowerCase() === req.params.id.toLowerCase()));
 
   if (!ipo) {
     return res.status(404).json({ error: 'IPO not found.' });
@@ -49,12 +49,24 @@ router.post('/:id/apply', requireAuth, (req, res) => {
   }
 
   const numLots = parseInt(lots, 10) || 1;
-  const totalShares = numLots * ipo.lotSize;
-  const price = parseFloat(bidPrice) || parseFloat(ipo.priceBand.split('-')[1].replace(/[^0-9.]/g, '')) || 100;
+  const totalShares = numLots * (ipo.lotSize || 10);
+  const bandUpper = (ipo.priceBand || '₹100 - ₹500').split('-')[1] || '500';
+  const price = parseFloat(bidPrice) || parseFloat(bandUpper.replace(/[^0-9.]/g, '')) || 100;
   const amountBlocked = Math.round(totalShares * price * 100) / 100;
 
-  const userFunds = db.findOne('funds', f => f.userId === req.user.id);
-  if (!userFunds || userFunds.availableCash < amountBlocked) {
+  let userFunds = db.findOne('funds', f => f.userId === req.user.id);
+  if (!userFunds) {
+    userFunds = {
+      userId: req.user.id,
+      availableCash: 500000,
+      usedMargin: 0,
+      withdrawableAmount: 500000,
+      totalDeposited: 500000,
+      totalWithdrawn: 0
+    };
+    db.insert('funds', userFunds);
+  }
+  if (userFunds.availableCash < amountBlocked) {
     return res.status(400).json({
       error: `Insufficient simulated funds for IPO application. Required: ₹${amountBlocked.toLocaleString('en-IN')}`
     });

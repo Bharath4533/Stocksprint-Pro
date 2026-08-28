@@ -157,11 +157,16 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/kyc', kycRoutes);
 
-const supabaseService = require('./services/supabaseService');
+const firebaseService = require('./services/firebaseService');
 
-app.get('/api/supabase/status', async (req, res) => {
-  const status = await supabaseService.getStatus();
-  res.json(status);
+// Firebase Cloud Sync Status
+app.get('/api/firebase/status', (req, res) => {
+  res.json(firebaseService.getStatus());
+});
+
+// Backward-compatible status alias
+app.get('/api/supabase/status', (req, res) => {
+  res.json(firebaseService.getStatus());
 });
 
 // Server-Sent Events (SSE) for simulated real-time market stream

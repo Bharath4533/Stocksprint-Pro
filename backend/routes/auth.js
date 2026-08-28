@@ -20,6 +20,26 @@ router.post('/demo', (req, res) => {
     demoUser = db.findOne('users', u => u.isDemo === true);
   }
 
+  // Ensure demo user has sufficient simulated capital
+  let demoFunds = db.findOne('funds', f => f.userId === demoUser.id);
+  if (!demoFunds || demoFunds.availableCash < 50000) {
+    if (demoFunds) {
+      demoFunds.availableCash = 500000;
+      demoFunds.usedMargin = 0;
+      demoFunds.withdrawableAmount = 500000;
+      db.update('funds', f => f.userId === demoUser.id, demoFunds);
+    } else {
+      db.insert('funds', {
+        userId: demoUser.id,
+        availableCash: 500000,
+        usedMargin: 0,
+        withdrawableAmount: 500000,
+        totalDeposited: 500000,
+        totalWithdrawn: 0
+      });
+    }
+  }
+
   const token = generateToken(demoUser);
   logger.logAudit({
     userId: demoUser.id,

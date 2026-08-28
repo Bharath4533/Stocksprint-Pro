@@ -87,10 +87,10 @@ const ProfileView = {
 
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
             <div>
-              <strong>Two-Factor Authentication (2FA)</strong>
-              <div style="font-size: 12.5px; color: var(--text-secondary);">Require OTP on new device sign-ins.</div>
+              <strong>Account Security & Password</strong>
+              <div style="font-size: 12.5px; color: var(--text-secondary);">Direct password verification on all sign-ins.</div>
             </div>
-            <span class="badge badge-gain">Enabled</span>
+            <span class="badge badge-gain">Active</span>
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">

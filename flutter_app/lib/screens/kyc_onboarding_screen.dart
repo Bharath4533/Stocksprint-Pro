@@ -12,11 +12,8 @@ class KycOnboardingScreen extends StatefulWidget {
 class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   int _currentStep = 0;
 
-  // Blank initial controllers - user must enter their real details
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _phoneOtpController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _emailOtpController = TextEditingController();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _bankAccController = TextEditingController();
@@ -29,25 +26,20 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
   String _nomineeRelation = 'Spouse';
   String _riskProfile = 'GROWTH';
   String _bankLookupInfo = '';
-  bool _isSendingOtp = false;
 
   final List<String> _stepTitles = [
-    'Mobile Phone Verification (SMS OTP)',
-    'Enter Mobile OTP Code',
-    'Registered Email Verification',
-    'Enter Email Confirmation Code',
-    'PAN Card Validation',
-    'Personal Details (DOB, Marital, Occupation)',
+    'Contact Information (Phone & Email)',
+    'Income Tax PAN Card Validation',
+    'Personal Demographics (DOB, Marital, Occupation)',
     'Bank Account & Live RBI IFSC Lookup',
     'SEBI Nominee Declaration',
-    'Communication Address',
-    'Investor Risk Profile & Activation',
+    'Residential Address & Risk Profile Activation',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Indian KYC Verification')),
+      appBar: AppBar(title: const Text('Indian KYC Verification (No OTP / DigiLocker)')),
       body: Stepper(
         currentStep: _currentStep,
         onStepContinue: () => _handleStepContinue(),
@@ -84,18 +76,13 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
             TextField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: '10-Digit Mobile Number',
-                hintText: 'Enter your 10-digit mobile number',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(labelText: '10-Digit Mobile Number', hintText: '9876543210', border: OutlineInputBorder()),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _isSendingOtp ? null : _sendPhoneOtp,
-              child: _isSendingOtp
-                  ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Text('📲 Send Real SMS OTP'),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(labelText: 'Registered Email Address', hintText: 'name@domain.com', border: OutlineInputBorder()),
             ),
           ],
         );
@@ -105,77 +92,16 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _phoneOtpController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: '6-Digit SMS Code',
-                hintText: 'Enter code received on mobile',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(onPressed: _verifyPhoneOtp, child: const Text('Verify Phone OTP')),
-          ],
-        );
-
-      case 2:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Registered Email Address',
-                hintText: 'name@domain.com',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _isSendingOtp ? null : _sendEmailOtp,
-              child: const Text('📧 Send Email Verification Code'),
-            ),
-          ],
-        );
-
-      case 3:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _emailOtpController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: '6-Digit Email Code',
-                hintText: 'Enter code from email inbox',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(onPressed: _verifyEmailOtp, child: const Text('Confirm Email')),
-          ],
-        );
-
-      case 4:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
               controller: _panController,
               textCapitalization: TextCapitalization.characters,
-              decoration: const InputDecoration(
-                labelText: '10-Character PAN Number',
-                hintText: 'e.g. ABCDE1234F',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(labelText: '10-Character PAN Number', hintText: 'e.g. ABCDE1234F', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 10),
             ElevatedButton(onPressed: _verifyPan, child: const Text('Validate PAN with Tax Registry')),
           ],
         );
 
-      case 5:
+      case 2:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -211,7 +137,7 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           ],
         );
 
-      case 6:
+      case 3:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -235,44 +161,44 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           ],
         );
 
-      case 7:
+      case 4:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _nomineeNameController,
-              decoration: const InputDecoration(labelText: 'Nominee Full Name', border: OutlineInputBorder()),
+              decoration: const InputDecoration(labelText: 'Nominee Full Legal Name', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: _nomineeRelation,
-              decoration: const InputDecoration(labelText: 'Relationship', border: OutlineInputBorder()),
+              decoration: const InputDecoration(labelText: 'Relationship with Nominee', border: OutlineInputBorder()),
               items: const [
                 DropdownMenuItem(value: 'Spouse', child: Text('Spouse')),
                 DropdownMenuItem(value: 'Father', child: Text('Father')),
                 DropdownMenuItem(value: 'Mother', child: Text('Mother')),
                 DropdownMenuItem(value: 'Child', child: Text('Child')),
                 DropdownMenuItem(value: 'Sibling', child: Text('Sibling')),
+                DropdownMenuItem(value: 'Other', child: Text('Other')),
               ],
               onChanged: (v) => setState(() => _nomineeRelation = v ?? 'Spouse'),
             ),
           ],
         );
 
-      case 8:
-        return TextField(
-          controller: _addressController,
-          maxLines: 3,
-          decoration: const InputDecoration(labelText: 'Full Residential Address with Pincode', border: OutlineInputBorder()),
-        );
-
-      case 9:
+      case 5:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            TextField(
+              controller: _addressController,
+              maxLines: 3,
+              decoration: const InputDecoration(labelText: 'Full Residential Address with Pincode', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               value: _riskProfile,
-              decoration: const InputDecoration(labelText: 'Risk Profile', border: OutlineInputBorder()),
+              decoration: const InputDecoration(labelText: 'Investor Risk Profile', border: OutlineInputBorder()),
               items: const [
                 DropdownMenuItem(value: 'CONSERVATIVE', child: Text('Conservative')),
                 DropdownMenuItem(value: 'GROWTH', child: Text('Growth & Capital Appreciation')),
@@ -281,7 +207,7 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
               onChanged: (v) => setState(() => _riskProfile = v ?? 'GROWTH'),
             ),
             const SizedBox(height: 16),
-            const Text('🎉 Verified KYC Ready for Activation', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+            const Text('🎉 Ready for Activation', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
             const SizedBox(height: 4),
             const Text('Your Indian trading account will be activated with ₹5,00,000 simulated capital.'),
           ],
@@ -300,84 +226,6 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
     }
   }
 
-  Future<void> _sendPhoneOtp() async {
-    final phone = _phoneController.text.trim();
-    if (phone.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter your mobile number'), backgroundColor: AppTheme.lossRed));
-      return;
-    }
-    setState(() => _isSendingOtp = true);
-    try {
-      final res = await ApiService.post('/kyc/send-phone-otp', {'phone': phone});
-      setState(() {
-        _isSendingOtp = false;
-        _currentStep = 1;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(res['message'] ?? 'SMS OTP Dispatched!'), backgroundColor: AppTheme.gainGreen),
-        );
-      }
-    } catch (e) {
-      setState(() => _isSendingOtp = false);
-    }
-  }
-
-  Future<void> _verifyPhoneOtp() async {
-    try {
-      await ApiService.post('/kyc/verify-phone-otp', {
-        'phone': _phoneController.text.trim(),
-        'otp': _phoneOtpController.text.trim(),
-      });
-      setState(() => _currentStep = 2);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: AppTheme.lossRed),
-        );
-      }
-    }
-  }
-
-  Future<void> _sendEmailOtp() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter your email address'), backgroundColor: AppTheme.lossRed));
-      return;
-    }
-    setState(() => _isSendingOtp = true);
-    try {
-      final res = await ApiService.post('/kyc/send-email-otp', {'email': email});
-      setState(() {
-        _isSendingOtp = false;
-        _currentStep = 3;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(res['message'] ?? 'Email code dispatched!'), backgroundColor: AppTheme.gainGreen),
-        );
-      }
-    } catch (e) {
-      setState(() => _isSendingOtp = false);
-    }
-  }
-
-  Future<void> _verifyEmailOtp() async {
-    try {
-      await ApiService.post('/kyc/verify-email-otp', {
-        'email': _emailController.text.trim(),
-        'otp': _emailOtpController.text.trim(),
-      });
-      setState(() => _currentStep = 4);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: AppTheme.lossRed),
-        );
-      }
-    }
-  }
-
   Future<void> _verifyPan() async {
     try {
       final res = await ApiService.post('/kyc/verify-pan', {'pan': _panController.text.trim().toUpperCase()});
@@ -386,7 +234,7 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
           SnackBar(content: Text('PAN Verified: ${res['entityType']}'), backgroundColor: AppTheme.gainGreen),
         );
       }
-      setState(() => _currentStep = 5);
+      setState(() => _currentStep = 2);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -427,7 +275,7 @@ class _KycOnboardingScreenState extends State<KycOnboardingScreen> {
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('KYC Verified successfully!'), backgroundColor: AppTheme.gainGreen),
+          const SnackBar(content: Text('KYC Verified successfully! Account Activated with ₹5,00,000!'), backgroundColor: AppTheme.gainGreen),
         );
         Navigator.pop(context);
       }

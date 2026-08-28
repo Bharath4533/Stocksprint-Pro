@@ -1,9 +1,9 @@
-// Production-Grade Real KYC & Verification Wizard for StockSprint Pro
-// 100% User-Input Flow with Blank Fields, Real SMS/Email OTP, PAN Validation, Live RBI IFSC Lookup
+// Streamlined Indian KYC Verification Wizard for StockSprint Pro
+// 100% Direct User-Input Flow without OTP or DigiLocker
 
 const OnboardingView = {
   currentStep: 1,
-  totalSteps: 10,
+  totalSteps: 6,
   formData: {
     phone: '',
     email: '',
@@ -20,12 +20,6 @@ const OnboardingView = {
     address: '',
     riskProfile: ''
   },
-  currentPhoneOtp: '',
-  currentEmailOtp: '',
-  phoneDeliveryMethod: '',
-  emailDeliveryMethod: '',
-  phoneVerified: false,
-  emailVerified: false,
   panVerified: false,
   bankVerified: false,
 
@@ -34,18 +28,18 @@ const OnboardingView = {
     container.innerHTML = `
       <div style="max-width: 680px; margin: 0 auto;">
         <div style="margin-bottom: 24px; text-align: center;">
-          <h1 style="font-size: 26px; font-weight: 800; color: var(--text-primary);">StockSprint Onboarding & KYC</h1>
-          <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">Complete your Indian regulatory KYC with your registered phone, email, PAN, and bank details.</p>
+          <h1 style="font-size: 26px; font-weight: 800; color: var(--text-primary);">StockSprint Indian KYC Verification</h1>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">Complete your regulatory KYC in 6 quick steps to activate full trading capabilities.</p>
         </div>
 
         <!-- Progress Bar -->
         <div class="card" style="margin-bottom: 24px; padding: 18px 24px;">
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">
-            <span>Step <span id="kyc-step-num">1</span> of 10</span>
-            <span id="kyc-step-title">Mobile Phone Verification</span>
+            <span>Step <span id="kyc-step-num">1</span> of 6</span>
+            <span id="kyc-step-title">Contact Information</span>
           </div>
           <div style="height: 8px; background: var(--bg-surface-subtle); border-radius: 4px; overflow: hidden;">
-            <div id="kyc-progress-fill" style="width: 10%; height: 100%; background: var(--brand-primary); border-radius: 4px; transition: width 0.3s ease;"></div>
+            <div id="kyc-progress-fill" style="width: 16.6%; height: 100%; background: var(--brand-primary); border-radius: 4px; transition: width 0.3s ease;"></div>
           </div>
         </div>
 
@@ -75,119 +69,61 @@ const OnboardingView = {
 
     switch (this.currentStep) {
       case 1:
-        title = 'Step 1: Mobile Phone Number';
+        title = 'Step 1: Contact Information';
         content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Enter your Mobile Number</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a 6-digit verification code to verify your mobile identity.</p>
-          <div class="form-group">
-            <label>10-Digit Mobile Number (e.g. 9876543210)</label>
-            <input type="tel" id="ob-phone-input" class="input" placeholder="Enter your 10-digit mobile number" value="${this.formData.phone || ''}">
+          <h3 style="font-size: 18px; margin-bottom: 8px;">Contact & Registration Details</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">Enter your active mobile number and email for trade alerts and contract notes.</p>
+          
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label>10-Digit Indian Mobile Number</label>
+            <input type="tel" id="ob-phone" class="input" placeholder="e.g. 9876543210" maxlength="10" value="${this.formData.phone || ''}">
           </div>
-          <div id="phone-send-status" style="margin: 10px 0; font-size: 12.5px;"></div>
-          <button id="btn-send-phone-otp" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleSendPhoneOtp()">
-            📲 Send Real SMS OTP
+
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label>Registered Email Address</label>
+            <input type="email" id="ob-email" class="input" placeholder="name@domain.com" value="${this.formData.email || ''}">
+          </div>
+
+          <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="OnboardingView.handleStep1Contact()">
+            Continue to PAN Validation ➔
           </button>
         `;
         break;
 
       case 2:
-        title = 'Step 2: Verify Mobile OTP';
+        title = 'Step 2: Income Tax PAN Validation';
         content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Enter 6-Digit Mobile Code</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Enter the 6-digit verification code sent to <strong>${this.formData.phone}</strong>.</p>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">Permanent Account Number (PAN)</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">Mandatory for Indian financial securities and demat trading.</p>
           
-          <div style="padding: 12px 16px; background: rgba(0, 208, 132, 0.08); border: 1px dashed var(--brand-primary); border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span><strong>Verification Code:</strong></span>
-              <span style="font-family: var(--font-mono); font-size: 17px; font-weight: 800; color: var(--brand-primary); letter-spacing: 3px;">${this.currentPhoneOtp || '123456'}</span>
-            </div>
-            <div style="font-size: 11.5px; color: var(--text-tertiary); margin-top: 4px;">Enter this 6-digit code below to verify your phone number.</div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label>10-Character PAN Number (e.g. ABCDE1234F)</label>
+            <input type="text" id="ob-pan-input" class="input" placeholder="Enter your 10-character PAN" value="${this.formData.pan || ''}" maxlength="10" style="text-transform: uppercase; font-family: var(--font-mono); font-size: 16px;">
           </div>
 
-          <div class="form-group">
-            <label>6-Digit SMS Code</label>
-            <input type="text" id="ob-phone-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus value="${this.currentPhoneOtp || ''}">
-          </div>
-          <div id="phone-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleVerifyPhoneOtp()">
-            ✅ Verify & Continue
-          </button>
-          <div style="text-align: center; margin-top: 12px;">
-            <button class="btn btn-ghost btn-sm" onclick="OnboardingView.handleSendPhoneOtp()">Resend SMS OTP</button>
+          <div id="pan-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
+
+          <div style="display: flex; gap: 10px; margin-top: 14px;">
+            <button class="btn btn-ghost" onclick="OnboardingView.goToStep(1)">Back</button>
+            <button class="btn btn-primary" style="flex: 1;" onclick="OnboardingView.handleVerifyPan()">
+              🔍 Validate PAN & Continue
+            </button>
           </div>
         `;
         break;
 
       case 3:
-        title = 'Step 3: Email Address';
-        content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Enter your Registered Email</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">We will dispatch a 6-digit confirmation code to verify your email.</p>
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="ob-email-input" class="input" placeholder="name@domain.com" value="${this.formData.email || ''}">
-          </div>
-          <div id="email-send-status" style="margin: 10px 0; font-size: 12.5px;"></div>
-          <button id="btn-send-email-otp" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleSendEmailOtp()">
-            📧 Send Real Email OTP
-          </button>
-        `;
-        break;
-
-      case 4:
-        title = 'Step 4: Verify Email OTP';
-        content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Enter Email Verification Code</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Enter the 6-digit code for <strong>${this.formData.email}</strong>.</p>
-          
-          <div style="padding: 12px 16px; background: rgba(0, 208, 132, 0.08); border: 1px dashed var(--brand-primary); border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span><strong>Verification Code:</strong></span>
-              <span style="font-family: var(--font-mono); font-size: 17px; font-weight: 800; color: var(--brand-primary); letter-spacing: 3px;">${this.currentEmailOtp || '123456'}</span>
-            </div>
-            <div style="font-size: 11.5px; color: var(--text-tertiary); margin-top: 4px;">Enter this 6-digit code below to confirm your email.</div>
-          </div>
-
-          <div class="form-group">
-            <label>6-Digit Email Code</label>
-            <input type="text" id="ob-email-otp-input" class="input" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 20px; text-align: center;" autofocus value="${this.currentEmailOtp || ''}">
-          </div>
-          <div id="email-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleVerifyEmailOtp()">
-            ✅ Confirm Email
-          </button>
-          <div style="text-align: center; margin-top: 12px;">
-            <button class="btn btn-ghost btn-sm" onclick="OnboardingView.handleSendEmailOtp()">Resend Email Code</button>
-          </div>
-        `;
-        break;
-
-      case 5:
-        title = 'Step 5: PAN Card Validation';
-        content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Permanent Account Number (PAN)</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Mandatory for Indian financial securities trading.</p>
-          <div class="form-group">
-            <label>10-Character PAN (e.g. ABCDE1234F)</label>
-            <input type="text" id="ob-pan-input" class="input" placeholder="Enter your 10-character PAN" value="${this.formData.pan || ''}" maxlength="10" style="text-transform: uppercase; font-family: var(--font-mono); font-size: 16px;">
-          </div>
-          <div id="pan-verify-status" style="margin: 10px 0; font-size: 12.5px;"></div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleVerifyPan()">
-            🔍 Validate PAN with Tax Registry
-          </button>
-        `;
-        break;
-
-      case 6:
-        title = 'Step 6: Personal Details';
+        title = 'Step 3: Personal Information';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Personal Information</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">SEBI regulatory KYC requirement.</p>
-          <div class="form-group">
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">SEBI regulatory demographic requirements.</p>
+          
+          <div class="form-group" style="margin-bottom: 14px;">
             <label>Date of Birth</label>
             <input type="date" id="ob-dob" class="input" value="${this.formData.dob || ''}">
           </div>
-          <div class="form-group">
+
+          <div class="form-group" style="margin-bottom: 14px;">
             <label>Marital Status</label>
             <select id="ob-marital" class="select">
               <option value="" disabled ${!this.formData.maritalStatus ? 'selected' : ''}>-- Select Marital Status --</option>
@@ -196,7 +132,8 @@ const OnboardingView = {
               <option value="Other" ${this.formData.maritalStatus === 'Other' ? 'selected' : ''}>Other</option>
             </select>
           </div>
-          <div class="form-group">
+
+          <div class="form-group" style="margin-bottom: 18px;">
             <label>Occupation</label>
             <select id="ob-occupation" class="select">
               <option value="" disabled ${!this.formData.occupation ? 'selected' : ''}>-- Select Occupation --</option>
@@ -208,44 +145,57 @@ const OnboardingView = {
               <option value="Retired" ${this.formData.occupation === 'Retired' ? 'selected' : ''}>Retired</option>
             </select>
           </div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleSavePersonalDetails()">Continue</button>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-ghost" onclick="OnboardingView.goToStep(2)">Back</button>
+            <button class="btn btn-primary" style="flex: 1;" onclick="OnboardingView.handleSavePersonalDetails()">Continue ➔</button>
+          </div>
         `;
         break;
 
-      case 7:
-        title = 'Step 7: Bank & Live RBI IFSC Lookup';
+      case 4:
+        title = 'Step 4: Bank Account & Live RBI IFSC Lookup';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">Link Bank Account</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Live lookup verifies your bank branch directly from the RBI IFSC Registry.</p>
-          <div class="form-group">
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">Live lookup verifies your bank branch directly from the RBI IFSC Registry.</p>
+          
+          <div class="form-group" style="margin-bottom: 14px;">
             <label>Bank Account Number</label>
             <input type="text" id="ob-bank-acc" class="input" placeholder="Enter your 9-18 digit account number" value="${this.formData.accountNumber || ''}">
           </div>
-          <div class="form-group">
+
+          <div class="form-group" style="margin-bottom: 14px;">
             <label>11-Character IFSC Code</label>
             <div style="display: flex; gap: 8px;">
               <input type="text" id="ob-ifsc" class="input" placeholder="e.g. HDFC0001234" value="${this.formData.ifsc || ''}" style="text-transform: uppercase; font-family: var(--font-mono);">
               <button class="btn btn-outline" type="button" onclick="OnboardingView.handleLookupIfsc()">Lookup</button>
             </div>
           </div>
-          <div id="bank-lookup-card" style="padding: 12px; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); margin-bottom: 14px; display: none;">
-            <div style="font-weight: 700; font-size: 13.5px;" id="bank-lookup-name"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);" id="bank-lookup-branch"></div>
+
+          <div id="bank-lookup-card" style="padding: 12px 14px; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); margin-bottom: 16px; display: none;">
+            <div style="font-weight: 700; font-size: 13.5px; color: var(--gain-green);" id="bank-lookup-name"></div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;" id="bank-lookup-branch"></div>
           </div>
-          <button class="btn btn-primary" style="width: 100%;" onclick="OnboardingView.handleVerifyBank()">Verify Bank & Penny Drop</button>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-ghost" onclick="OnboardingView.goToStep(3)">Back</button>
+            <button class="btn btn-primary" style="flex: 1;" onclick="OnboardingView.handleVerifyBank()">Verify Bank & Continue ➔</button>
+          </div>
         `;
         break;
 
-      case 8:
-        title = 'Step 8: Nominee Declaration';
+      case 5:
+        title = 'Step 5: SEBI Nominee Declaration';
         content = `
           <h3 style="font-size: 18px; margin-bottom: 8px;">SEBI Nominee Declaration</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Appoint a nominee for your trading and demat securities.</p>
-          <div class="form-group">
-            <label>Nominee Full Name</label>
-            <input type="text" id="ob-nominee-name" class="input" placeholder="Enter nominee's legal full name" value="${this.formData.nomineeName || ''}">
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">Appoint a nominee for your trading and demat securities.</p>
+          
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label>Nominee Full Legal Name</label>
+            <input type="text" id="ob-nominee-name" class="input" placeholder="Enter nominee's full name" value="${this.formData.nomineeName || ''}">
           </div>
-          <div class="form-group">
+
+          <div class="form-group" style="margin-bottom: 18px;">
             <label>Relationship with Nominee</label>
             <select id="ob-nominee-rel" class="select">
               <option value="" disabled ${!this.formData.nomineeRelation ? 'selected' : ''}>-- Select Relationship --</option>
@@ -257,30 +207,27 @@ const OnboardingView = {
               <option value="Other" ${this.formData.nomineeRelation === 'Other' ? 'selected' : ''}>Other</option>
             </select>
           </div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleSaveNominee()">Continue</button>
-        `;
-        break;
 
-      case 9:
-        title = 'Step 9: Communication Address';
-        content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Residential Address</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Address for correspondence and regulatory contract notes.</p>
-          <div class="form-group">
-            <label>Full Address with City, State & 6-Digit Pincode</label>
-            <textarea id="ob-address" class="input" rows="3" placeholder="Enter your full residential address...">${this.formData.address || ''}</textarea>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-ghost" onclick="OnboardingView.goToStep(4)">Back</button>
+            <button class="btn btn-primary" style="flex: 1;" onclick="OnboardingView.handleSaveNominee()">Continue ➔</button>
           </div>
-          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="OnboardingView.handleSaveAddress()">Continue</button>
         `;
         break;
 
-      case 10:
-        title = 'Step 10: Investor Risk Profile & Activation';
+      case 6:
+        title = 'Step 6: Residential Address & Risk Profile';
         content = `
-          <h3 style="font-size: 18px; margin-bottom: 8px;">Investor Risk Profile</h3>
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Select your risk tolerance for Indian stock trading and mutual funds.</p>
-          <div class="form-group">
-            <label>Investment Objective & Risk Tolerance</label>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">Address & Investor Profile</h3>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">Enter your address and select your investment risk tolerance.</p>
+          
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label>Full Residential Address with Pincode</label>
+            <textarea id="ob-address" class="input" rows="3" placeholder="Enter full address, city, state and 6-digit pincode...">${this.formData.address || ''}</textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label>Investor Risk Profile</label>
             <select id="ob-risk" class="select">
               <option value="" disabled ${!this.formData.riskProfile ? 'selected' : ''}>-- Select Risk Profile --</option>
               <option value="CONSERVATIVE" ${this.formData.riskProfile === 'CONSERVATIVE' ? 'selected' : ''}>Conservative (Capital Preservation & Low Volatility)</option>
@@ -288,9 +235,13 @@ const OnboardingView = {
               <option value="AGGRESSIVE" ${this.formData.riskProfile === 'AGGRESSIVE' ? 'selected' : ''}>Aggressive (High Volatility Equities & Intraday MIS)</option>
             </select>
           </div>
-          <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 14px;" onclick="OnboardingView.finishKYC()">
-            🚀 Submit Verified KYC & Trade
-          </button>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-ghost" onclick="OnboardingView.goToStep(5)">Back</button>
+            <button class="btn btn-primary btn-lg" style="flex: 1;" onclick="OnboardingView.finishKYC()">
+              🚀 Submit KYC & Activate ₹5,00,000 Trading Account
+            </button>
+          </div>
         `;
         break;
     }
@@ -299,100 +250,27 @@ const OnboardingView = {
     body.innerHTML = content;
   },
 
-  async handleSendPhoneOtp() {
-    const phoneInput = document.getElementById('ob-phone-input');
-    const statusDiv = document.getElementById('phone-send-status');
-    const phone = phoneInput ? phoneInput.value.trim() : '';
+  goToStep(step) {
+    this.currentStep = step;
+    this.renderCurrentStep();
+  },
+
+  handleStep1Contact() {
+    const phone = document.getElementById('ob-phone')?.value.trim();
+    const email = document.getElementById('ob-email')?.value.trim();
 
     if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
       Toast.error('Please enter a valid 10-digit mobile number.');
       return;
     }
-
-    this.formData.phone = phone;
-    if (statusDiv) statusDiv.innerHTML = '<span style="color:var(--brand-primary);">Sending SMS OTP...</span>';
-
-    try {
-      const res = await api.post('/kyc/send-phone-otp', { phone });
-      Toast.success(res.message);
-      this.currentPhoneOtp = res.devOtp || '123456';
-      this.phoneDeliveryMethod = res.method;
-      this.currentStep = 2;
-      this.renderCurrentStep();
-    } catch (err) {
-      if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
-      Toast.error(err.message);
-    }
-  },
-
-  async handleVerifyPhoneOtp() {
-    const otpInput = document.getElementById('ob-phone-otp-input');
-    const statusDiv = document.getElementById('phone-verify-status');
-    const otp = otpInput ? otpInput.value.trim() : '';
-
-    if (!otp || otp.length < 4) {
-      Toast.error('Please enter the 6-digit OTP code.');
-      return;
-    }
-
-    try {
-      const res = await api.post('/kyc/verify-phone-otp', { phone: this.formData.phone, otp });
-      Toast.success(res.message);
-      this.phoneVerified = true;
-      this.currentStep = 3;
-      this.renderCurrentStep();
-    } catch (err) {
-      if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
-      Toast.error(err.message);
-    }
-  },
-
-  async handleSendEmailOtp() {
-    const emailInput = document.getElementById('ob-email-input');
-    const statusDiv = document.getElementById('email-send-status');
-    const email = emailInput ? emailInput.value.trim() : '';
-
     if (!email || !email.includes('@')) {
       Toast.error('Please enter a valid email address.');
       return;
     }
 
+    this.formData.phone = phone;
     this.formData.email = email;
-    if (statusDiv) statusDiv.innerHTML = '<span style="color:var(--brand-primary);">Dispatching verification email...</span>';
-
-    try {
-      const res = await api.post('/kyc/send-email-otp', { email });
-      Toast.success(res.message);
-      this.currentEmailOtp = res.devOtp || '123456';
-      this.emailDeliveryMethod = res.method;
-      this.currentStep = 4;
-      this.renderCurrentStep();
-    } catch (err) {
-      if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
-      Toast.error(err.message);
-    }
-  },
-
-  async handleVerifyEmailOtp() {
-    const otpInput = document.getElementById('ob-email-otp-input');
-    const statusDiv = document.getElementById('email-verify-status');
-    const otp = otpInput ? otpInput.value.trim() : '';
-
-    if (!otp || otp.length < 4) {
-      Toast.error('Please enter the 6-digit email verification code.');
-      return;
-    }
-
-    try {
-      const res = await api.post('/kyc/verify-email-otp', { email: this.formData.email, otp });
-      Toast.success(res.message);
-      this.emailVerified = true;
-      this.currentStep = 5;
-      this.renderCurrentStep();
-    } catch (err) {
-      if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
-      Toast.error(err.message);
-    }
+    this.goToStep(2);
   },
 
   async handleVerifyPan() {
@@ -410,8 +288,7 @@ const OnboardingView = {
       this.formData.pan = pan;
       this.panVerified = true;
       Toast.success(`PAN Verified: ${res.entityType}`);
-      this.currentStep = 6;
-      this.renderCurrentStep();
+      this.goToStep(3);
     } catch (err) {
       if (statusDiv) statusDiv.innerHTML = `<span style="color:var(--loss-red);">${err.message}</span>`;
       Toast.error(err.message);
@@ -439,8 +316,7 @@ const OnboardingView = {
     this.formData.dob = dob;
     this.formData.maritalStatus = marital;
     this.formData.occupation = occupation;
-    this.currentStep = 7;
-    this.renderCurrentStep();
+    this.goToStep(4);
   },
 
   async handleLookupIfsc() {
@@ -492,8 +368,7 @@ const OnboardingView = {
       this.formData.ifsc = ifsc;
       this.bankVerified = true;
       Toast.success(res.message);
-      this.currentStep = 8;
-      this.renderCurrentStep();
+      this.goToStep(5);
     } catch (err) {
       Toast.error(err.message);
     }
@@ -514,28 +389,23 @@ const OnboardingView = {
 
     this.formData.nomineeName = nomName;
     this.formData.nomineeRelation = nomRel;
-    this.currentStep = 9;
-    this.renderCurrentStep();
+    this.goToStep(6);
   },
 
-  handleSaveAddress() {
+  async finishKYC() {
     const address = document.getElementById('ob-address')?.value.trim();
+    const risk = document.getElementById('ob-risk')?.value;
+
     if (!address || address.length < 8) {
       Toast.error('Please enter your full communication address.');
       return;
     }
-
-    this.formData.address = address;
-    this.currentStep = 10;
-    this.renderCurrentStep();
-  },
-
-  async finishKYC() {
-    const risk = document.getElementById('ob-risk')?.value;
     if (!risk) {
       Toast.error('Please select your Investor Risk Profile.');
       return;
     }
+
+    this.formData.address = address;
     this.formData.riskProfile = risk;
 
     try {
@@ -552,7 +422,7 @@ const OnboardingView = {
         address: this.formData.address,
         riskProfile: this.formData.riskProfile
       });
-      Toast.success('🎉 Real Indian KYC Verified & Approved!');
+      Toast.success('🎉 KYC Verified & ₹5,00,000 Trading Account Activated!');
       window.location.hash = '#/dashboard';
     } catch (e) {
       window.location.hash = '#/dashboard';

@@ -82,7 +82,7 @@ async function runIntegrationTests() {
     assert(res.data.stocks.length > 0);
   });
 
-  // 2. Authentication Flow
+  // 2. Authentication Flow (Password-Based & Demo)
   await test('POST /api/auth/demo returns token and demo user', async () => {
     const res = await request('/api/auth/demo', { method: 'POST' });
     assert.strictEqual(res.status, 200);
@@ -91,25 +91,50 @@ async function runIntegrationTests() {
     authToken = res.data.token;
   });
 
-  await test('POST /api/auth/send-phone-otp dispatches OTP for mobile login', async () => {
-    const res = await request('/api/auth/send-phone-otp', {
+  const testTimestamp = Date.now();
+  const testEmail = `trader_${testTimestamp}@stocksprint.in`;
+  const testPhone = `98${Math.floor(10000000 + Math.random() * 90000000)}`;
+
+  await test('POST /api/auth/register creates user with password and ₹5,00,000 capital', async () => {
+    const res = await request('/api/auth/register', {
       method: 'POST',
-      body: { phone: '6374271146' }
+      body: {
+        name: 'Arjun Trader',
+        phone: testPhone,
+        email: testEmail,
+        password: 'Password@123'
+      }
     });
-    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.status, 201);
     assert.strictEqual(res.data.success, true);
-    assert(res.data.phone.includes('63742'));
+    assert(res.data.token);
+    assert.strictEqual(res.data.user.name, 'Arjun Trader');
   });
 
-  await test('POST /api/auth/phone-login logs in user via verified phone number', async () => {
-    const res = await request('/api/auth/phone-login', {
+  await test('POST /api/auth/login authenticates via Email + Password', async () => {
+    const res = await request('/api/auth/login', {
       method: 'POST',
-      body: { phone: '6374271146', otp: '123456' }
+      body: {
+        identifier: testEmail,
+        password: 'Password@123'
+      }
     });
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.success, true);
     assert(res.data.token);
-    assert(res.data.user.phone.includes('63742'));
+  });
+
+  await test('POST /api/auth/login authenticates via Phone Number + Password', async () => {
+    const res = await request('/api/auth/login', {
+      method: 'POST',
+      body: {
+        identifier: testPhone,
+        password: 'Password@123'
+      }
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert(res.data.token);
   });
 
   // 3. Markets & Stock Master
